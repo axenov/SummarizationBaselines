@@ -4,7 +4,7 @@ Implementation of extractive summarization baselines. For the moment there are:
 
 - Random: Select n sentences randomly.
 - Lead: Select the n first sentences.
-- LexRank: Compute similariry between sentences and select the n first sentences ranked using PageRank style algorithm
+- LexRank: Compute similarity between sentences and select the n first sentences ranked using PageRank style algorithm
 
 > More baselines to come
 
