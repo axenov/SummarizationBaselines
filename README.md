@@ -1,4 +1,4 @@
-# ExtractiveSumBaslines
+# ExtractiveSumBaselines
 
 Implementation of extractive summarization baselines. For the moment there are:
 
