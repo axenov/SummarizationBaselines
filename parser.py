@@ -5,14 +5,14 @@ import json
 
 @dataclass
 class BaselineArgs:
-    baseline_name: str
+    baseline_class: str
     init_kwargs: dict
     run_kwargs: dict
 
     @classmethod
     def from_dict(cls, data):
         return cls(
-            baseline_name=data["baseline_name"],
+            baseline_class=data["baseline_class"],
             init_kwargs=data["init_kwargs"],
             run_kwargs=data["run_kwargs"],
         )
