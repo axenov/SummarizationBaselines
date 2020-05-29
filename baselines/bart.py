@@ -28,7 +28,7 @@ class Bart(Baseline):
             hypotheses_toks = self.model.generate(
                 input_ids=example_batch["input_ids"].to(self.device),
                 attention_mask=example_batch["attention_mask"].to(self.device),
-                decoder_start_token_id=model.config.eos_token_id,
+                decoder_start_token_id=self.model.config.eos_token_id,
                 **kwargs,
             )
             hypotheses = [
