@@ -1,6 +1,7 @@
 from baselines.baselines import use
 import utils
 from nlp import load_dataset
+from pathlib import Path
 
 from parser import parse_json_file
 
@@ -13,7 +14,7 @@ dataset = load_dataset(
 
 # Compute baselines
 scores = {}
-for baseline in args.baselines[-2:]:
+for baseline in args.baselines:
     print(f"Compute {baseline.name}...")
     dataset, score = use(baseline.name, **baseline.init_kwargs).compute_rouge(
         dataset,
@@ -25,6 +26,7 @@ for baseline in args.baselines[-2:]:
     scores[baseline.name] = score
 
 # Save results
+Path(args.run.hypotheses_folder).mkdir(parents=True, exist_ok=True)
 utils.write_references(
     dataset, args.run.hypotheses_folder, args.dataset.summary_colunm_name
 )
