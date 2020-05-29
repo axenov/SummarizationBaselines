@@ -38,7 +38,7 @@ class Baseline(object):
         """
         dataset = self.run(dataset, document_column_name, **kwargs)
         num_sentences = kwargs["num_sentences"]
-
+        
         if isinstance(num_sentences, int):
             num_sentences = [num_sentences for i in range(len(dataset))]
         if len(num_sentences) != len(dataset):
@@ -73,11 +73,6 @@ class Baseline(object):
         Return:
             summaries (list(str)): summaries of each document 
         """
-        num_sentences = kwargs["num_sentences"]
-        if num_sentences == -1:
-            num_sentences = [
-                len(sent_tokenize(ref)) for ref in dataset[summary_colunm_name]
-            ]
         return self.get_summaries(dataset, document_column_name, **kwargs)
 
     def compute_rouge(
