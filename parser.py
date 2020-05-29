@@ -12,7 +12,7 @@ class BaselineArgs:
     @classmethod
     def from_dict(cls, data):
         return cls(
-            name=data["name"],
+            baseline_name=data["baseline_name"],
             init_kwargs=data["init_kwargs"],
             run_kwargs=data["run_kwargs"],
         )
