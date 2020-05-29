@@ -38,6 +38,9 @@ class Bart(Baseline):
                 )
                 for toks in hypotheses_toks
             ]
+            print(hypotheses)
+            print(type(hypotheses))
+            print(len(hypotheses))
             return {f"{self.name}_hypothesis": hypotheses}
 
         dataset.map(add_abstractive_summary, batched=True, batch_size=self.batch_size)
