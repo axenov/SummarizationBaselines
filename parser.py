@@ -6,17 +6,15 @@ import json
 @dataclass
 class BaselineArgs:
     name: str
-    num_sentences: str
-    kwargs: dict
+    init_kwargs: dict
+    run_kwargs: dict
 
     @classmethod
     def from_dict(cls, data):
         return cls(
             name=data["name"],
-            num_sentences=data["num_sentences"],
-            kwargs={
-                k: v for k, v in data.items() if k not in ["name", "num_sentences"]
-            },
+            init_kwargs=data["init_kwargs"],
+            run_kwargs=data["run_kwargs"],
         )
 
 

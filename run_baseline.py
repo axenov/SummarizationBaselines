@@ -13,15 +13,14 @@ dataset = load_dataset(
 
 # Compute baselines
 scores = {}
-for baseline in args.baselines:
+for baseline in args.baselines[-1:]:
     print(f"Compute {baseline.name}...")
-    dataset, score = use(baseline.name).compute_rouge(
+    dataset, score = use(baseline.name, **baseline.init_kwargs).compute_rouge(
         dataset,
         args.dataset.document_column_name,
         args.dataset.summary_colunm_name,
-        baseline.num_sentences,
         list(args.run.rouge_types.keys()),
-        **baseline.kwargs,
+        **baseline.run_kwargs,
     )
     scores[baseline.name] = score
 

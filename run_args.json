@@ -1,8 +1,25 @@
 {
     "baselines": [
-        {"name": "Random", "num_sentences": 10},
-        {"name": "Lead", "num_sentences": 10},
-        {"name": "LexRank", "num_sentences": 10, "threshold": 0.03, "increase_power": true}
+        {"name": "Random", "init_kwargs": {}, "run_kwargs": {"num_sentences": 10}},
+        {"name": "Lead", "init_kwargs": {}, "run_kwargs": {"num_sentences": 10}},
+        {"name": "LexRank", "init_kwargs": {}, "run_kwargs": {"num_sentences": 10, "threshold": 0.03, "increase_power": true}},
+        {
+            "name": "Bart", 
+            "init_kwargs": {
+                "model_name": "bart-large-cnn",
+                "input_max_length": 512,
+                "device": "cpu",
+                "batch_size": 16
+            }, 
+            "run_kwargs": {
+                "num_beams": 4,
+                "length_penalty": 2.0,
+                "max_length": 400,
+                "min_length": 200,
+                "no_repeat_ngram_size": 3,
+                "early_stopping": true
+            }
+        }
     ],
 
     "dataset": {

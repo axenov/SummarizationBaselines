@@ -11,7 +11,7 @@ class Lead(Baseline):
     We set k to the length of the ground-truth target.
     """
 
-    def run(self, dataset, document_column_name):
+    def run(self, dataset, document_column_name, **kwargs):
         all_sentences = list(map(sent_tokenize, dataset[document_column_name]))
         scores = [[1 for sentence in sentences] for sentences in all_sentences]
 

@@ -26,21 +26,18 @@ class Baseline(object):
 
         raise NotImplementedError()
 
-    def get_extractive_summaries(
-        self, dataset, document_column_name, num_sentences, **kwargs
-    ):
+    def get_summaries(self, dataset, document_column_name, **kwargs):
         """
         Get the extractive summary of each documents
         Args:
             dataset (nlp.Dataset): dataset containing document to summarize
             document_column_name (str): name of the column of the dataset containing documents
-            num_sentences (int or list(int)): number of sentences in the summary. If one value, all summaries will have the same number of sentences. If list of values, the len(list) must be equal to len(documents).
-            **kwargs: arguments to pass to the run function
+            **kwargs: arguments to pass to the run function or get_summaries
         Return:
             dataset (nlp.Dataset): dataset with a new column for hypothesis
         """
-
         dataset = self.run(dataset, document_column_name, **kwargs)
+        num_sentences = kwargs["num_sentences"]
 
         if isinstance(num_sentences, int):
             num_sentences = [num_sentences for i in range(len(dataset))]
@@ -64,12 +61,7 @@ class Baseline(object):
         return dataset
 
     def generate_hypotheses(
-        self,
-        dataset,
-        document_column_name,
-        summary_colunm_name,
-        num_sentences,
-        **kwargs,
+        self, dataset, document_column_name, summary_colunm_name, **kwargs,
     ):
         """
         Get the extractive summary of each documents based on the reference summary length
@@ -77,25 +69,22 @@ class Baseline(object):
             dataset (nlp.Dataset): dataset containing document to summarize
             document_column_name (str): name of the column of the dataset containing documents
             summary_colunm_name (str): name of the column of the dataset containing summaries
-            num_sentences (int): number of sentences in the summary. -1 for adaptative
             **kwargs: arguments to pass to the run function
         Return:
             summaries (list(str)): summaries of each document 
         """
+        num_sentences = kwargs["num_sentences"]
         if num_sentences == -1:
             num_sentences = [
                 len(sent_tokenize(ref)) for ref in dataset[summary_colunm_name]
             ]
-        return self.get_extractive_summaries(
-            dataset, document_column_name, num_sentences, **kwargs
-        )
+        return self.get_summaries(dataset, document_column_name, **kwargs)
 
     def compute_rouge(
         self,
         dataset,
         document_column_name,
         summary_colunm_name,
-        num_sentences,
         rouge_types=["rouge1", "rouge2", "rougeL"],
         **kwargs,
     ):
@@ -105,7 +94,6 @@ class Baseline(object):
             dataset (nlp.Dataset): dataset containing document to summarize
             document_column_name (str): name of the column of the dataset containing documents
             summary_colunm_name (str): name of the column of the dataset containing summaries
-            num_sentences (int): number of sentences in the summary. -1 for adaptative
             rouge_types (lst(str)): list of ROUGE types you want to compute
             **kwargs: arguments to pass to the run function
         Return:
@@ -113,7 +101,7 @@ class Baseline(object):
         """
 
         dataset = self.generate_hypotheses(
-            dataset, document_column_name, summary_colunm_name, num_sentences, **kwargs
+            dataset, document_column_name, summary_colunm_name, **kwargs
         )
 
         rouge_metric = load_metric("rouge")
@@ -133,7 +121,6 @@ class Baseline(object):
         dataset,
         document_column_name,
         summary_colunm_name,
-        num_sentences,
         filename,
         write_ref=False,
         ref_filename=None,
@@ -145,7 +132,6 @@ class Baseline(object):
             dataset (nlp.Dataset): dataset containing document to summarize
             document_column_name (str): name of the column of the dataset containing documents
             summary_colunm_name (str): name of the column of the dataset containing summaries
-            num_sentences (int): number of sentences in the summary. -1 for adaptative
             filename (str): path to the output file where write hypotheses
             write_ref (bool): True if save references in ref_filename
             ref_filename (str): path to the output file where write references
@@ -153,7 +139,7 @@ class Baseline(object):
         """
 
         dataset = self.generate_hypotheses(
-            dataset, document_column_name, summary_colunm_name, num_sentences, **kwargs
+            dataset, document_column_name, summary_colunm_name, **kwargs
         )
         with open(filename, "w") as f:
             for hyp in dataset[f"{self.name}_hypothesis"]:

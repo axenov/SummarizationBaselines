@@ -20,7 +20,7 @@ class LexRank(Baseline):
     Most of the code is from https://github.com/crabcamp/lexrank
     """
 
-    def run(self, dataset, document_column_name, threshold=0.03, increase_power=True):
+    def run(self, dataset, document_column_name, threshold=0.03, increase_power=True, **kwargs):
         all_sentences = []
         all_scores = []
         for document in dataset[document_column_name]:

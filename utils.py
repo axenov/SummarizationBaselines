@@ -2,7 +2,9 @@ from os.path import join
 
 
 def write_hypotheses(dataset, hypotheses_folder):
-    hyp_columns = [column for column in dataset.column_names if column[-10:] == "hypothesis"]
+    hyp_columns = [
+        column for column in dataset.column_names if column[-10:] == "hypothesis"
+    ]
     for baseline in hyp_columns:
         with open(join(hypotheses_folder, baseline + ".txt"), "w") as f:
             for hyp in dataset[baseline]:
@@ -44,7 +46,7 @@ def _get_proper_scores(scores, rouge_types):
                 proper_score.append(_get_measure_value(score[rouge_type], measure))
         proper_score.insert(0, baseline)
         proper_scores.append(proper_score)
-    head.insert(0, '   ')
+    head.insert(0, "   ")
     proper_scores.insert(0, head)
     return proper_scores
 
