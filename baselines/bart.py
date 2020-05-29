@@ -1,6 +1,7 @@
 from nltk.tokenize import sent_tokenize
 from transformers import BartTokenizer, BartForConditionalGeneration
 import torch
+from tqdm import tqdm
 
 from baselines.baseline import Baseline
 
@@ -22,29 +23,28 @@ class Bart(Baseline):
     def get_summaries(
         self, dataset, document_column_name, **kwargs,
     ):
-        dataset = self.prepare_dataset(dataset, document_column_name)
+        dataloader = self.prepare_dataset(dataset, document_column_name)
         self.model = self.model.to(self.device)
 
-        def add_abstractive_summary(example_batch):
-            hypotheses_toks = self.model.generate(
+        hypotheses = []
+        for example_batch in tqdm(dataloader):
+            batch_hypotheses_toks = self.model.generate(
                 input_ids=example_batch["input_ids"].to(self.device),
                 attention_mask=example_batch["attention_mask"].to(self.device),
                 decoder_start_token_id=self.model.config.eos_token_id,
                 **kwargs,
             )
-            hypotheses = [
+            batch_hypotheses = [
                 self.tokenizer.decode(
                     toks, skip_special_tokens=True, clean_up_tokenization_spaces=False
                 )
-                for toks in hypotheses_toks
+                for toks in batch_hypotheses_toks
             ]
-            print(hypotheses)
-            print(type(hypotheses))
-            print(len(hypotheses))
-            return {f"{self.name}_hypothesis": hypotheses}
+            hypotheses.extend(batch_hypotheses)
 
-        dataset.map(add_abstractive_summary, batched=True, batch_size=self.batch_size)
-        dataset.reset_format()
+        dataset = self.append_column(dataset, hypotheses, f"{self.name}_hypothesis")
+        print("DATASET:::")
+        print(dataset)
         return dataset
 
     def prepare_dataset(self, dataset, document_column_name):
@@ -67,4 +67,5 @@ class Bart(Baseline):
         dataset = dataset.map(convert_to_features, batched=True)
         columns = ["input_ids", "attention_mask"]
         dataset.set_format(type="torch", columns=columns)
-        return dataset
+        dataloader = torch.utils.data.DataLoader(dataset, batch_size=self.batch_size)
+        return dataloader
