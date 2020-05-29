@@ -23,6 +23,7 @@ class Bart(Baseline):
         self, dataset, document_column_name, **kwargs,
     ):
         dataset = self.prepare_dataset(dataset, document_column_name)
+        self.model = self.model.to(self.device)
 
         def add_abstractive_summary(example_batch):
             hypotheses_toks = self.model.generate(
