@@ -26,8 +26,8 @@ class Bart(Baseline):
 
         def add_abstractive_summary(example_batch):
             hypotheses_toks = self.model.generate(
-                input_ids=example_batch["input_ids"].to(device),
-                attention_mask=example_batch["attention_mask"].to(device),
+                input_ids=example_batch["input_ids"].to(self.device),
+                attention_mask=example_batch["attention_mask"].to(self.device),
                 decoder_start_token_id=model.config.eos_token_id,
                 **kwargs,
             )
