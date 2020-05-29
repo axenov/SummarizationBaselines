@@ -2,6 +2,7 @@ from nltk.tokenize import sent_tokenize
 
 from baselines.baseline import Baseline
 
+
 class Lead(Baseline):
 
     """ Description from https://arxiv.org/pdf/1905.13164.pdf
@@ -10,7 +11,12 @@ class Lead(Baseline):
     We set k to the length of the ground-truth target.
     """
 
-    def run(self, documents):
-        all_sentences = list(map(sent_tokenize, documents))
+    def run(self, dataset, document_column_name):
+        all_sentences = list(map(sent_tokenize, dataset[document_column_name]))
         scores = [[1 for sentence in sentences] for sentences in all_sentences]
-        return all_sentences, scores
+
+        data = [
+            {"sentences": sentences, "scores": scores}
+            for sentences, scores in zip(all_sentences, scores)
+        ]
+        return Baseline.append_column(dataset, data, self.name)

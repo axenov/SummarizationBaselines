@@ -20,14 +20,19 @@ class LexRank(Baseline):
     Most of the code is from https://github.com/crabcamp/lexrank
     """
 
-    def run(self, documents, threshold=0.03, increase_power=True):
+    def run(self, dataset, document_column_name, threshold=0.03, increase_power=True):
         all_sentences = []
         all_scores = []
-        for document in documents:
+        for document in dataset[document_column_name]:
             sentences, scores = self.run_single(document, threshold, increase_power)
             all_sentences.append(sentences)
             all_scores.append(scores)
-        return all_sentences, all_scores
+
+        data = [
+            {"sentences": sentences, "scores": scores}
+            for sentences, scores in zip(all_sentences, all_scores)
+        ]
+        return Baseline.append_column(dataset, data, self.name)
 
     def run_single(self, document, threshold=0.03, increase_power=True):
 

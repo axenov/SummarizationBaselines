@@ -1,0 +1,27 @@
+{
+    "baselines": [
+        {"name": "Random", "num_sentences": 10},
+        {"name": "Lead", "num_sentences": 10},
+        {"name": "LexRank", "num_sentences": 10, "threshold": 0.03, "increase_power": true}
+    ],
+
+    "dataset": {
+        "name": "en_wiki_multi_news_cleaned.py",
+        "split": "test",
+        "cache_dir": ".en-wiki-multi-news-cache",
+        "document_column_name": "document",
+        "summary_colunm_name": "summary"
+    },
+
+    "run": {
+        "hypotheses_folder": "hypotheses/",
+        "csv_file": "results.csv",
+        "md_file": "results.md",
+        "rouge_types": {
+            "rouge1": ["mid.fmeasure"],
+            "rouge2": ["mid.fmeasure"],
+            "rougeL": ["mid.fmeasure"]
+        }
+    }
+        
+}

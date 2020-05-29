@@ -2,89 +2,173 @@
 
 import os
 import numpy as np
-from nltk.tokenize import sent_tokenize
+from nltk.tokenize import sent_tokenize, word_tokenize
+from nlp import load_metric
+import pyarrow as pa
+
 
 class Baseline(object):
-    def __init__(self):
+    def __init__(self, name):
         """ 
         A Baseline is the base class for all baselines.
         """
-        pass
+        self.name = name
 
-    def run(self, documents, **kwargs):
+    def run(self, dataset, document_column_name, **kwargs):
         """
         Run the baseline for all documents.
         Args:
-            documents (list(str)): documents to be process
+            dataset (nlp.Dataset): dataset containing document to summarize
+            document_column_name (str): name of the column of the dataset containing documents
         Return:
-            sentences (list(list(str))): sentences for each document
-            scores (list(list(float))): score for each sentence
+            dataset (nlp.Dataset): dataset with a new column containing sentences and scores.
         """
 
         raise NotImplementedError()
 
-    def get_extractive_summaries(self, documents, num_sentences, **kwargs):
+    def get_extractive_summaries(
+        self, dataset, document_column_name, num_sentences, **kwargs
+    ):
         """
         Get the extractive summary of each documents
         Args:
-            documents (list(str)): documents to be process
+            dataset (nlp.Dataset): dataset containing document to summarize
+            document_column_name (str): name of the column of the dataset containing documents
             num_sentences (int or list(int)): number of sentences in the summary. If one value, all summaries will have the same number of sentences. If list of values, the len(list) must be equal to len(documents).
             **kwargs: arguments to pass to the run function
         Return:
-            summaries (list(str)): summaries of each document 
+            dataset (nlp.Dataset): dataset with a new column for hypothesis
         """
 
-        all_sentences, all_scores = self.run(documents, **kwargs)
+        dataset = self.run(dataset, document_column_name, **kwargs)
 
         if isinstance(num_sentences, int):
-            num_sentences = [num_sentences for i in range(len(documents))]
-        if len(num_sentences) != len(documents):
+            num_sentences = [num_sentences for i in range(len(dataset))]
+        if len(num_sentences) != len(dataset):
             raise ValueError("documents and num_sentences must have the same length")
 
-        summaries = []
-        for i in range(len(documents)):
-            scores = np.array(all_scores[i])
+        dataset = Baseline.append_column(dataset, num_sentences, "num_sentences")
+
+        def get_extractive_summary(example):
+            scores = np.array(example[self.name]["scores"])
+            sentences = example[self.name]["sentences"]
             sorted_ix = np.argsort(scores)[::-1]
-            summary = ' '.join([all_sentences[i][j] for j in sorted_ix[: num_sentences[i]]])
-            summaries.append(summary)
+            hyp = " ".join(
+                [sentences[j] for j in sorted_ix[: example["num_sentences"]]]
+            )
+            example[f"{self.name}_hypothesis"] = hyp
+            return example
 
-        return summaries
+        dataset = dataset.map(get_extractive_summary)
+        dataset.drop("num_sentences")
+        return dataset
 
-    def generate_hypotheses(self, documents, references, num_sentences, **kwargs):
+    def generate_hypotheses(
+        self,
+        dataset,
+        document_column_name,
+        summary_colunm_name,
+        num_sentences,
+        **kwargs,
+    ):
         """
         Get the extractive summary of each documents based on the reference summary length
         Args:
-            documents (list(str)): documents to be process
-            references (list(str)): references summaries
+            dataset (nlp.Dataset): dataset containing document to summarize
+            document_column_name (str): name of the column of the dataset containing documents
+            summary_colunm_name (str): name of the column of the dataset containing summaries
             num_sentences (int): number of sentences in the summary. -1 for adaptative
             **kwargs: arguments to pass to the run function
         Return:
             summaries (list(str)): summaries of each document 
         """
         if num_sentences == -1:
-            num_sentences = [len(sent_tokenize(ref)) for ref in references]
-        return self.get_extractive_summaries(documents, num_sentences, **kwargs)
+            num_sentences = [
+                len(sent_tokenize(ref)) for ref in dataset[summary_colunm_name]
+            ]
+        return self.get_extractive_summaries(
+            dataset, document_column_name, num_sentences, **kwargs
+        )
 
-    def write_hypotheses(self, documents, references, num_sentences, filename, write_ref=False, ref_filename=None, **kwargs):
+    def compute_rouge(
+        self,
+        dataset,
+        document_column_name,
+        summary_colunm_name,
+        num_sentences,
+        rouge_types=["rouge1", "rouge2", "rougeL"],
+        **kwargs,
+    ):
+        """
+        Generate hypotheses and compute ROUGE score between summaries and hypotheses
+        Args:
+            dataset (nlp.Dataset): dataset containing document to summarize
+            document_column_name (str): name of the column of the dataset containing documents
+            summary_colunm_name (str): name of the column of the dataset containing summaries
+            num_sentences (int): number of sentences in the summary. -1 for adaptative
+            rouge_types (lst(str)): list of ROUGE types you want to compute
+            **kwargs: arguments to pass to the run function
+        Return:
+            score (dict(Score)): dict of ROUGE types with the score (see nlp metrics for details)
+        """
+
+        dataset = self.generate_hypotheses(
+            dataset, document_column_name, summary_colunm_name, num_sentences, **kwargs
+        )
+
+        rouge_metric = load_metric("rouge")
+
+        def compute_rouge_batch(example):
+            predictions = example[f"{self.name}_hypothesis"]
+            references = example["summary"]
+            predictions = list(map(lambda s: " ".join(word_tokenize(s)), predictions))
+            references = list(map(lambda s: " ".join(word_tokenize(s)), references))
+            rouge_metric.add(predictions, references)
+
+        dataset.map(compute_rouge_batch, batched=True)
+        return dataset, rouge_metric.compute(rouge_types=rouge_types)
+
+    def write_hypotheses(
+        self,
+        dataset,
+        document_column_name,
+        summary_colunm_name,
+        num_sentences,
+        filename,
+        write_ref=False,
+        ref_filename=None,
+        **kwargs,
+    ):
         """
         Write the extractive summary of each documents based on the reference summary length in a file
         Args:
-            documents (list(str)): documents to be process
-            references (list(str)): references summaries
-            filename (str): path to the output file where write hypotheses
+            dataset (nlp.Dataset): dataset containing document to summarize
+            document_column_name (str): name of the column of the dataset containing documents
+            summary_colunm_name (str): name of the column of the dataset containing summaries
             num_sentences (int): number of sentences in the summary. -1 for adaptative
+            filename (str): path to the output file where write hypotheses
             write_ref (bool): True if save references in ref_filename
             ref_filename (str): path to the output file where write references
             **kwargs: arguments to pass to the run function
         """
 
-        hypotheses = self.generate_hypotheses(documents, references, num_sentences, **kwargs)
-        with open(filename, 'w') as f:
-            for hyp in hypotheses:
-                f.write(hyp.replace('\n', '') + '\n')
+        dataset = self.generate_hypotheses(
+            dataset, document_column_name, summary_colunm_name, num_sentences, **kwargs
+        )
+        with open(filename, "w") as f:
+            for hyp in dataset[f"{self.name}_hypothesis"]:
+                f.write(hyp.replace("\n", "") + "\n")
         if write_ref:
             if ref_filename == None:
-                raise ValueError(f"if write_ref set to True ref_filename ({ref_filename}) must be a correct path")
-            with open(ref_filename, 'w') as f:
-                for ref in references:
-                    f.write(ref.replace('\n', '') + '\n')
+                raise ValueError(
+                    f"if write_ref set to True ref_filename ({ref_filename}) must be a correct path"
+                )
+            with open(ref_filename, "w") as f:
+                for ref in dataset[summary_colunm_name]:
+                    f.write(ref.replace("\n", "") + "\n")
+
+    @staticmethod
+    def append_column(dataset, data, column_name):
+        data = pa.array(data)
+        dataset._data = dataset.data.append_column(column_name, data)
+        return dataset

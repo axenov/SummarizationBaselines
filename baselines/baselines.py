@@ -8,8 +8,8 @@ from baselines.lexrank import LexRank
 
 def use(name):
     if name == "Random":
-        return Random()
+        return Random("random")
     if name == "Lead":
-        return Lead()
+        return Lead("lead")
     if name == "LexRank":
-        return LexRank()
+        return LexRank("lexrank")

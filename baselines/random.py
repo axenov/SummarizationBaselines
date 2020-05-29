@@ -1,5 +1,5 @@
 from nltk.tokenize import sent_tokenize
-from random import random
+import random
 
 from baselines.baseline import Baseline
 
@@ -10,7 +10,15 @@ class Random(Baseline):
     Give a random score to all sentences
     """
 
-    def run(self, documents):
-        all_sentences = list(map(sent_tokenize, documents))
-        scores = [[random() for sentence in sentences] for sentences in all_sentences]
-        return all_sentences, scores
+    def run(self, dataset, document_column_name, seed=42):
+        random.seed(seed)
+        all_sentences = list(map(sent_tokenize, dataset[document_column_name]))
+        scores = [
+            [random.random() for sentence in sentences] for sentences in all_sentences
+        ]
+
+        data = [
+            {"sentences": sentences, "scores": scores}
+            for sentences, scores in zip(all_sentences, scores)
+        ]
+        return Baseline.append_column(dataset, data, self.name)
