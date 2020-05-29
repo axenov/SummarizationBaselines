@@ -22,9 +22,7 @@ class Bart(Baseline):
     def get_summaries(
         self, dataset, document_column_name, **kwargs,
     ):
-        dataset = self.prepare_dataset(
-            dataset, self.input_max_length, document_column_name
-        )
+        dataset = self.prepare_dataset(dataset, document_column_name)
 
         def add_abstractive_summary(example_batch):
             hypotheses_toks = model.generate(
@@ -45,14 +43,13 @@ class Bart(Baseline):
         dataset.reset_format()
         return dataset
 
-    @staticmethod
-    def prepare_dataset(dataset, input_max_length, document_column_name):
+    def prepare_dataset(self, dataset, document_column_name):
         def convert_to_features(
             example_batch,
-            input_max_length=input_max_length,
+            input_max_length=self.input_max_length,
             document_column_name=document_column_name,
         ):
-            input_encodings = tokenizer.batch_encode_plus(
+            input_encodings = self.tokenizer.batch_encode_plus(
                 example_batch[document_column_name],
                 pad_to_max_length=True,
                 max_length=input_max_length,
