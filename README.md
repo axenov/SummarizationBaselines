@@ -12,86 +12,86 @@ Implementation of extractive summarization baselines. For the moment there are:
 
 ```
 git clone https://github.com/airKlizz/ExtractiveSumBaslines
+cd ExtractiveSumBaslines
 ```
 
 There is no ``requirements.txt`` file yet so install depedencies on demand :hugs:.
 
 ## Usage
 
-You can use a baseline to generate summaries:
+To run baseline you first have to configure the ``run_args.json`` file with your parameters.
 
-```python
-from baselines.baselines import use
+This repository is based on [``nlp`` library](https://github.com/huggingface/nlp) for load data and to compute ROUGE metric. 
 
-baseline = use("LexRank") # use the baseline name you want to use ("Random", "Lead" or "LexRank")
+The idea is that you have a summarization dataset (``nlp.Dataset`` class) with at least a column with texts to summarize (``document_column_name``) and one column with reference summaries (``summary_colunm_name``). Then you want to run multiple baselines on it and compare ROUGE results of these differents methods of summarization.
 
-num_sentences = 3 # Number of sentences to return
-DOCUMENT_TO_SUMMARIZE = """ Frontline medical workers in the US, the UK and elsewhere may face major risks in their efforts to battle the coronavirus pandemic, but they've also seen an outpouring of public appreciation. In Russia, health workers say they face fear, mistrust -- and even open hostility.
-Tatyana Revva, an intensive care specialist in the central district hospital of the city of Kalach-on-Don in southern Russia, shared a video in late March about equipment shortages with the Doctors Alliance, an advocacy group aligned with Russia's political opposition. After the video went viral, she said, she was summoned by local police about it.
-"I was called to the police and gave a statement with a lawyer, but another statement against me was sent to the prosecutor's office," Revva told CNN via Skype after finishing a night shift.
-Revva said law-enforcement investigators subsequently checked the availability of PPE and ventilators at her hospital.
-"But the check was carried out a month after I flagged the problems," she said. "You can imagine how much had been purchased in a month after the buzz the video made."
-Revva says she has not been fined by the police but now fears professional retaliation. Police have not responded to CNN's request for comment. The hospital administration could not immediately be reached for comment, but the hospital's chief doctor, Oleg Kumeiko, said in a March 29 statement on YouTube that the information posted online about PPE shortages was "absolutely untrue."
-Rumors and conspiracy theories abound in Russia about Covid-19: that the virus was invented by doctors to control society; that medical workers are hiding the true extent of the casualties from the public; or that medical personnel are falsely attributing deaths to Covid-19 to receive more money from the government. """
+You can add your summarization model (extractive or abstractive) as a new baseline to compare its performance with other baselines. Go [here](#add-baseline) for more details to add a baseline.
 
-summaries = baseline.get_extractive_summaries([DOCUMENT_TO_SUMMARIZE], num_sentences)
+Once you have all baselines you need and your dataset you can configure the ``run_args.json`` file.
 
-print(summaries[0])
-'''
-Output:
-Rumors and conspiracy theories abound in Russia about Covid-19: that the virus was invented by doctors to control society; that medical workers are hiding the true extent of the casualties from the public; or that medical personnel are falsely attributing deaths to Covid-19 to receive more money from the government. Tatyana Revva, an intensive care specialist in the central district hospital of the city of Kalach-on-Don in southern Russia, shared a video in late March about equipment shortages with the Doctors Alliance, an advocacy group aligned with Russia's political opposition.  Frontline medical workers in the US, the UK and elsewhere may face major risks in their efforts to battle the coronavirus pandemic, but they've also seen an outpouring of public appreciation.
-'''
+This file is composed as follow:
+
+```json
+{
+    "baselines": [
+        # List of baselines you want to run
+        # For each baseline you need to pass the name et the number of sentences the summary must be.
+        # You can also add args which are passed to the run function of the baseline
+        # Example:
+        {"name": "Random", "num_sentences": 10},
+        {"name": "LexRank", "num_sentences": 10, "threshold": 0.03, "increase_power": true}
+        {"name": "Lead", "num_sentences": 10},
+    ],
+
+    "dataset": {
+        # Dataset parameters with:
+        # the name of the nlp dataset or the path to the python script
+        # the split of the dataset to test on
+        # the cache_dir for the dataset load function
+        # the name of the column containing texts to summarize
+        # the name of the column containing reference summaries
+        # Example:
+        "name": "en_wiki_multi_news_cleaned.py",
+        "split": "test",
+        "cache_dir": ".en-wiki-multi-news-cache",
+        "document_column_name": "document",
+        "summary_colunm_name": "summary"
+    },
+
+    "run": {
+        # Arguments of what you want to save of the run
+        # rouge_types is a dict of rouge_type and measure for the rouge_type. See nlp metrics for more details.
+        # Example:
+        "hypotheses_folder": "hypotheses/",
+        "csv_file": "results.csv",
+        "md_file": "results.md",
+        "rouge_types": {
+            "rouge1": ["mid.fmeasure"],
+            "rouge2": ["mid.fmeasure"],
+            "rougeL": ["mid.fmeasure"]
+        }
+    }
+}
 ```
 
-You can use a baseline to generate a hypotheses file which contains summaries generated by the baseline and then run ``files2rouge`` to get metrics.
+Once the file is configured you can run the computation by running:
 
-``run_baseline`` load ``en-wiki-multi-news`` dataset and run baseline on it. To run on your dataset change the script.
-
-```basch
-python run_baseline.py --baseline_name "LexRank"\
-                        --filename "hyp.txt"
-                        --num_to_process -1
-                        --write_ref True
-                        --ref_filename "ref.txt"
-                        --num_sentences 13
-
-files2rouge hyp.txt ref.txt
-
-Output:
----------------------------------------------
-1 ROUGE-1 Average_R: 0.58866 (95%-conf.int. 0.57761 - 0.59931)
-1 ROUGE-1 Average_P: 0.33434 (95%-conf.int. 0.32077 - 0.34812)
-1 ROUGE-1 Average_F: 0.40624 (95%-conf.int. 0.39504 - 0.41721)
----------------------------------------------
-1 ROUGE-2 Average_R: 0.21517 (95%-conf.int. 0.20503 - 0.22657)
-1 ROUGE-2 Average_P: 0.12173 (95%-conf.int. 0.11419 - 0.12985)
-1 ROUGE-2 Average_F: 0.14795 (95%-conf.int. 0.14040 - 0.15612)
----------------------------------------------
-1 ROUGE-L Average_R: 0.28105 (95%-conf.int. 0.27325 - 0.28928)
-1 ROUGE-L Average_P: 0.15363 (95%-conf.int. 0.14777 - 0.15989)
-1 ROUGE-L Average_F: 0.18892 (95%-conf.int. 0.18350 - 0.19464)
+```
+python run_baseline.py
 ```
 
-Run ``python run_baseline.py -h`` for more details. And see [here](https://github.com/pltrdy/files2rouge) to install ``files2rouge``.
+Results are stored to the files/folder you put in the ``run_args.json`` file.
 
 ## Add baseline
 
-If you want to add your baseline you have to create a script similar to ``baselines/lead.py`` which contain a subclass of ``Baseline`` and define the function ``run(self, documents, **kwargs)``. The ``run`` function must score every sentences of each document. Then just add you baseline on the ``baselines/baselines.py`` file by adding a condition and you can use your baseline.
+If you want to add your baseline you have to create a script similar to ``baselines/lead.py`` which contain a subclass of ``Baseline`` and define the function ``run(self, dataset, document_column_name, **kwargs)``. The ``run`` function must score every sentences of each document. Then just add you baseline on the ``baselines/baselines.py`` file by adding a condition and you can use your baseline.
 
 ## Results for ``en-wiki-multi-news``
 
-With the same number of sentences (hypotheses and references have the same number of sentences. Run ``python run_baseline.py -h`` for details):
+With 10 sentences in hypotheses:
 
-| Baseline | Rouge1 F | Rouge2 F | RougeL F |
-| -------- | -------- | -------- | -------- |
-| Random | 42.42 | 13.51 | 19.01 |
-| Lead | 41.81 | 14.02 | 19.31 |
-| LexRank | 42.35 | 15.18 | 19.59 |
-
-With 13 sentences in hypotheses:
-
-| Baseline | Rouge1 F | Rouge2 F | RougeL F |
-| -------- | -------- | -------- | -------- |
-| Random | 40.67 | 13.20 | 18.13 |
-| Lead | 40.51 | 13.87 | 18.86 |
-| LexRank | 40.62 | 14.79 | 18.89 |
+|     | rouge1.mid.fmeasure | rouge2.mid.fmeasure | rougeL.mid.fmeasure |
+| --- | --- | --- | --- |
+| Random | 37.80% | 11.91% | 17.31% |
+| Lead | 37.47% | 12.34% | 17.73% |
+| LexRank | 40.06% | 13.86% | 18.33% |
