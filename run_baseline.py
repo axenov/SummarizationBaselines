@@ -15,8 +15,8 @@ dataset = load_dataset(
 # Compute baselines
 scores = {}
 for baseline in args.baselines:
-    print(f"Compute {baseline.name}...")
-    dataset, score = use(baseline.name, **baseline.init_kwargs).compute_rouge(
+    print(f"Compute {baseline.baseline_class}...")
+    dataset, score = use(baseline.baseline_class, **baseline.init_kwargs).compute_rouge(
         dataset,
         args.dataset.document_column_name,
         args.dataset.summary_colunm_name,

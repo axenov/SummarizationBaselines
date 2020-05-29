@@ -5,7 +5,7 @@ import json
 
 @dataclass
 class BaselineArgs:
-    name: str
+    baseline_name: str
     init_kwargs: dict
     run_kwargs: dict
 

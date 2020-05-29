@@ -8,15 +8,15 @@ from baselines.t5 import T5
 # from baselines.tfidf import TFIDF
 
 
-def use(name, **init_kwargs):
-    if name == "Random":
+def use(baseline_class, **init_kwargs):
+    if baseline_class == "Random":
         return Random(**init_kwargs)
-    if name == "Lead":
+    if baseline_class == "Lead":
         return Lead(**init_kwargs)
-    if name == "LexRank":
+    if baseline_class == "LexRank":
         return LexRank(**init_kwargs)
-    if name == "Bart":
+    if baseline_class == "Bart":
         return Bart(**init_kwargs)
-    if name == "T5":
+    if baseline_class == "T5":
         return T5(**init_kwargs)
-    raise ValueError("Baseline name not correct")
+    raise ValueError("Baseline baseline_class not correct")

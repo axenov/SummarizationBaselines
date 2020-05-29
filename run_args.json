@@ -1,10 +1,10 @@
 {
     "baselines": [
-        {"name": "Random", "init_kwargs": {"name": "Random"}, "run_kwargs": {"num_sentences": 10}},
-        {"name": "Lead", "init_kwargs": {"name": "Lead"}, "run_kwargs": {"num_sentences": 10}},
-        {"name": "LexRank", "init_kwargs": {"name": "LexRank"}, "run_kwargs": {"num_sentences": 10, "threshold": 0.03, "increase_power": true}},
+        {"baseline_class": "Random", "init_kwargs": {"name": "Random"}, "run_kwargs": {"num_sentences": 10}},
+        {"baseline_class": "Lead", "init_kwargs": {"name": "Lead"}, "run_kwargs": {"num_sentences": 10}},
+        {"baseline_class": "LexRank", "init_kwargs": {"name": "LexRank"}, "run_kwargs": {"num_sentences": 10, "threshold": 0.03, "increase_power": true}},
         {
-            "name": "Bart", 
+            "baseline_class": "Bart", 
             "init_kwargs": {
                 "name": "Bart CNN",
                 "model_name": "bart-large-cnn",
@@ -22,7 +22,7 @@
             }
         },
         {
-            "name": "T5", 
+            "baseline_class": "T5", 
             "init_kwargs": {
                 "name": "T5 base",
                 "model_name": "t5-base",
@@ -40,7 +40,7 @@
             }
         },
         {
-            "name": "T5", 
+            "baseline_class": "T5", 
             "init_kwargs": {
                 "name": "T5 fine tuned",
                 "model_name": ["t5-base", "/content/drive/My Drive/Colab Notebooks/Multi-wiki-news/English/t5-wild-glitter-2"],
