@@ -8,7 +8,7 @@
             "init_kwargs": {
                 "model_name": "bart-large-cnn",
                 "input_max_length": 512,
-                "device": "cpu",
+                "device": "cuda",
                 "batch_size": 16
             }, 
             "run_kwargs": {
