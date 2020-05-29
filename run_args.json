@@ -9,7 +9,7 @@
                 "model_name": "bart-large-cnn",
                 "input_max_length": 512,
                 "device": "cuda",
-                "batch_size": 16
+                "batch_size": 8
             }, 
             "run_kwargs": {
                 "num_beams": 4,
