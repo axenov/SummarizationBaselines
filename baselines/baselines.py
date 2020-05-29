@@ -2,6 +2,7 @@ from baselines.random import Random
 from baselines.lead import Lead
 from baselines.lexrank import LexRank
 from baselines.bart import Bart
+from baselines.t5 import T5
 
 # from baselines.mmr import mmr
 # from baselines.tfidf import TFIDF
@@ -9,11 +10,13 @@ from baselines.bart import Bart
 
 def use(name, **init_kwargs):
     if name == "Random":
-        return Random("random", **init_kwargs)
+        return Random(**init_kwargs)
     if name == "Lead":
-        return Lead("lead", **init_kwargs)
+        return Lead(**init_kwargs)
     if name == "LexRank":
-        return LexRank("lexrank", **init_kwargs)
+        return LexRank(**init_kwargs)
     if name == "Bart":
-        return Bart("bart", **init_kwargs)
+        return Bart(**init_kwargs)
+    if name == "T5":
+        return T5(**init_kwargs)
     raise ValueError("Baseline name not correct")

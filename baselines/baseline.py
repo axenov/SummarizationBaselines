@@ -12,7 +12,7 @@ class Baseline(object):
         """ 
         A Baseline is the base class for all baselines.
         """
-        self.name = name
+        self.name = name.replace(" ", "-").lower()
 
     def run(self, dataset, document_column_name, **kwargs):
         """
