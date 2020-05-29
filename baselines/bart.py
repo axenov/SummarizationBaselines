@@ -63,7 +63,7 @@ class Bart(Baseline):
             }
             return encodings
 
-        dataset = dataset.map(Bart.convert_to_features, batched=True)
+        dataset = dataset.map(convert_to_features, batched=True)
         columns = ["input_ids", "target_ids", "attention_mask", "target_attention_mask"]
         dataset.set_format(type="torch", columns=columns)
         return dataset
