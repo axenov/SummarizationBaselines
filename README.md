@@ -31,7 +31,7 @@ Once you have all baselines you need and your dataset you can configure the ``ru
 
 This file is composed as follow:
 
-```json
+```
 {
     "baselines": [
         # List of baselines you want to run
