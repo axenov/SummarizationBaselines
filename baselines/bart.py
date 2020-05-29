@@ -20,7 +20,7 @@ class Bart(Baseline):
         self.batch_size = batch_size
 
     def get_summaries(
-        self, dataset, document_column_name, num_sentences, **kwargs,
+        self, dataset, document_column_name, **kwargs,
     ):
         dataset = self.prepare_dataset(
             dataset, self.input_max_length, document_column_name
@@ -54,9 +54,7 @@ class Bart(Baseline):
 
     @staticmethod
     def convert_to_features(
-        example_batch,
-        input_max_length,
-        document_column_name,
+        example_batch, input_max_length, document_column_name,
     ):
         input_encodings = tokenizer.batch_encode_plus(
             example_batch[document_column_name],

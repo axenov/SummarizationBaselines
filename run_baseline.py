@@ -13,7 +13,7 @@ dataset = load_dataset(
 
 # Compute baselines
 scores = {}
-for baseline in args.baselines[-1:]:
+for baseline in args.baselines[-2:]:
     print(f"Compute {baseline.name}...")
     dataset, score = use(baseline.name, **baseline.init_kwargs).compute_rouge(
         dataset,
