@@ -25,7 +25,7 @@ class Bart(Baseline):
         dataset = self.prepare_dataset(dataset, document_column_name)
 
         def add_abstractive_summary(example_batch):
-            hypotheses_toks = model.generate(
+            hypotheses_toks = self.model.generate(
                 input_ids=example_batch["input_ids"].to(device),
                 attention_mask=example_batch["attention_mask"].to(device),
                 decoder_start_token_id=model.config.eos_token_id,
