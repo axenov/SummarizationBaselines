@@ -47,22 +47,23 @@ class Bart(Baseline):
 
     @staticmethod
     def prepare_dataset(dataset, input_max_length, document_column_name):
+        def convert_to_features(
+            example_batch,
+            input_max_length=input_max_length,
+            document_column_name=document_column_name,
+        ):
+            input_encodings = tokenizer.batch_encode_plus(
+                example_batch[document_column_name],
+                pad_to_max_length=True,
+                max_length=input_max_length,
+            )
+            encodings = {
+                "input_ids": input_encodings["input_ids"],
+                "attention_mask": input_encodings["attention_mask"],
+            }
+            return encodings
+
         dataset = dataset.map(Bart.convert_to_features, batched=True)
         columns = ["input_ids", "target_ids", "attention_mask", "target_attention_mask"]
         dataset.set_format(type="torch", columns=columns)
         return dataset
-
-    @staticmethod
-    def convert_to_features(
-        example_batch, input_max_length, document_column_name,
-    ):
-        input_encodings = tokenizer.batch_encode_plus(
-            example_batch[document_column_name],
-            pad_to_max_length=True,
-            max_length=input_max_length,
-        )
-        encodings = {
-            "input_ids": input_encodings["input_ids"],
-            "attention_mask": input_encodings["attention_mask"],
-        }
-        return encodings
