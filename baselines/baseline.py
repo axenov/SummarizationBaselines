@@ -106,7 +106,7 @@ class Baseline(object):
             references = example["summary"]
             predictions = list(map(lambda s: " ".join(word_tokenize(s)), predictions))
             references = list(map(lambda s: " ".join(word_tokenize(s)), references))
-            rouge_metric.add(predictions, references)
+            rouge_metric.add_batch(predictions, references)
 
         dataset.map(compute_rouge_batch, batched=True)
         return dataset, rouge_metric.compute(rouge_types=rouge_types)

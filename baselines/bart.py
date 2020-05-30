@@ -43,8 +43,6 @@ class Bart(Baseline):
             hypotheses.extend(batch_hypotheses)
 
         dataset = self.append_column(dataset, hypotheses, f"{self.name}_hypothesis")
-        print("DATASET:::")
-        print(dataset)
         return dataset
 
     def prepare_dataset(self, dataset, document_column_name):
