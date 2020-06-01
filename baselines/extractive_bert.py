@@ -44,8 +44,6 @@ class ExtractiveBert(Baseline):
 
     def rank_sentences(self, dataset, document_column_name, num_sentences, **kwargs):
         def run_extractive(example):
-            print("map function")
-
             # Data process
             document = (
                 example[document_column_name]
