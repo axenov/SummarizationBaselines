@@ -31,7 +31,7 @@ You can add your summarization model (extractive or abstractive) as a new baseli
 
 Once you have all baselines you need and your dataset you can configure the ``run_args.json`` file.
 
-This file is composed as follow:
+This is an example of a ``run_args.json`` file:
 
 ```json
 {
@@ -152,4 +152,4 @@ Then just add you baseline on the ``baselines/baselines.py`` file by adding a ``
 | T5 base | 22.90% | 6.82% | 12.92% |
 | T5 fine tuned | 41.38% | 16.14% | 22.58% |
 
-> Table obtained by running the sample ``run_args.json`` file and the table is automatically generated in ``results.md``.
+> Table obtained by running the example ``run_args.json`` file and the table is automatically generated in ``results.md``.
