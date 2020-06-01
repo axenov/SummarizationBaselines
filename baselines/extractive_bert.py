@@ -37,6 +37,9 @@ class ExtractiveBert(Baseline):
         self.model = Summarizer.from_pretrained(
             model_folder, reg_file, bert_file=bert_file, logger=logger
         )
+        self.model.test()
+        if torch.cuda.is_available():
+            self.model.cuda()
         self.alpha = alpha
 
     def rank_sentences(self, dataset, document_column_name, num_sentences, **kwargs):
