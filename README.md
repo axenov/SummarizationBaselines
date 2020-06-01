@@ -1,3 +1,5 @@
+[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/drive/1yQ-6PMfu2a0MTZfn-MZxkOfMzYf5HcXj?usp=sharing)
+
 # Summarization Baselines
 
 Implementation of extractive summarization baselines. For the moment there are:
