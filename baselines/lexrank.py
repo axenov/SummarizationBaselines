@@ -20,7 +20,7 @@ class LexRank(Baseline):
     Most of the code is from https://github.com/crabcamp/lexrank
     """
 
-    def run(
+    def rank_sentences(
         self,
         dataset,
         document_column_name,

@@ -10,7 +10,7 @@ class Random(Baseline):
     Give a random score to all sentences
     """
 
-    def run(self, dataset, document_column_name, seed=42, **kwargs):
+    def rank_sentences(self, dataset, document_column_name, seed=42, **kwargs):
         random.seed(seed)
         all_sentences = list(map(sent_tokenize, dataset[document_column_name]))
         scores = [

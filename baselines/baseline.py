@@ -14,7 +14,7 @@ class Baseline(object):
         """
         self.name = name.replace(" ", "-").lower()
 
-    def run(self, dataset, document_column_name, **kwargs):
+    def rank_sentences(self, dataset, document_column_name, **kwargs):
         """
         Run the extractive baseline for all documents by associating a score to each sentences.
         Args:
@@ -32,11 +32,11 @@ class Baseline(object):
         Args:
             dataset (nlp.Dataset): dataset containing document to summarize
             document_column_name (str): name of the column of the dataset containing documents
-            **kwargs: arguments to pass to the run function or get_summaries
+            **kwargs: arguments to pass to the run function
         Return:
             dataset (nlp.Dataset): dataset with a new column for hypothesis
         """
-        dataset = self.run(dataset, document_column_name, **kwargs)
+        dataset = self.rank_sentences(dataset, document_column_name, **kwargs)
         num_sentences = kwargs["num_sentences"]
 
         if isinstance(num_sentences, int):
@@ -80,9 +80,7 @@ class Baseline(object):
             score (dict(Score)): dict of ROUGE types with the score (see nlp metrics for details)
         """
 
-        dataset = self.get_summaries(
-            dataset, document_column_name, **kwargs
-        )
+        dataset = self.get_summaries(dataset, document_column_name, **kwargs)
 
         rouge_metric = load_metric("rouge")
 

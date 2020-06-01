@@ -23,7 +23,7 @@ for baseline in args.baselines:
         list(args.run.rouge_types.keys()),
         **baseline.run_kwargs,
     )
-    scores[baseline.init_kwargs['name']] = score
+    scores[baseline.init_kwargs["name"]] = score
 
 # Save results
 Path(args.run.hypotheses_folder).mkdir(parents=True, exist_ok=True)

@@ -113,7 +113,6 @@ This is an example of a ``run_args.json`` file:
             "rougeL": ["mid.fmeasure"]
         }
     }
-        
 }
 ```
 
@@ -133,9 +132,9 @@ Results are stored to the files/folder you put in the ``run_args.json`` file.
 
 ## Add baseline
 
-If you want to add your baseline you have to create a script similar to ``baselines/lead.py`` for extractive baseline or ``baselines/bart.py`` for abstractive baseline which contain a subclass of ``Baseline`` and define the function ``def run(self, dataset, document_column_name, **kwargs)`` or ``def get_summaries(self, dataset, document_column_name, **kwargs)``. 
+If you want to add your baseline you have to create a script similar to ``baselines/lead.py`` for extractive baseline or ``baselines/bart.py`` for abstractive baseline which contain a subclass of ``Baseline`` and define the function ``def rank_sentences(self, dataset, document_column_name, **kwargs)`` or ``def get_summaries(self, dataset, document_column_name, **kwargs)``. 
 
-For extractive baseline, the function ``run`` ranks all sentences of each document and add scores and sentences in a new column of the dataset. It returns the dataset.
+For extractive baseline, the function ``rank_sentences`` ranks all sentences of each document and add scores and sentences in a new column of the dataset. It returns the dataset.
 
 For abstractive baseline, the function ``get_summaries`` summaries each document and add summaries (also called hypotheses) in a new column of the dataset. It returns the dataset.
 

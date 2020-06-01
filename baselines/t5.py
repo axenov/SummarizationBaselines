@@ -47,17 +47,15 @@ class T5(Baseline):
         return dataset
 
     def prepare_dataset(self, dataset, document_column_name):
-
         def add_eos_to_examples(example, document_column_name=document_column_name):
-            example['input_text'] = 'summarize: %s </s>' % example[document_column_name]
+            example["input_text"] = "summarize: %s </s>" % example[document_column_name]
             return example
 
         def convert_to_features(
-            example_batch,
-            input_max_length=self.input_max_length,
+            example_batch, input_max_length=self.input_max_length,
         ):
             input_encodings = self.tokenizer.batch_encode_plus(
-                example_batch['input_text'],
+                example_batch["input_text"],
                 pad_to_max_length=True,
                 max_length=input_max_length,
             )
