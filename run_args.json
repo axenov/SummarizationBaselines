@@ -4,7 +4,7 @@
             "baseline_class": "Extractive Bert", 
             "init_kwargs": {
                 "name": "Extractive Bert", 
-                "model_folder": "/home/airklizz/Downloads/T5-preprocessing/models/test-rouge2-wiki-bert/", 
+                "model_folder": "/content/drive/My Drive/Github/SummarizationBaselines/models/test-rouge2-wiki-bert/", 
                 "reg_file": "reg_test-rouge2-wiki-bert_400.pt", 
                 "bert_file": null, 
                 "alpha": 0.7
