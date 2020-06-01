@@ -16,7 +16,7 @@ class Baseline(object):
 
     def run(self, dataset, document_column_name, **kwargs):
         """
-        Run the baseline for all documents.
+        Run the extractive baseline for all documents by associating a score to each sentences.
         Args:
             dataset (nlp.Dataset): dataset containing document to summarize
             document_column_name (str): name of the column of the dataset containing documents
@@ -28,7 +28,7 @@ class Baseline(object):
 
     def get_summaries(self, dataset, document_column_name, **kwargs):
         """
-        Get the extractive summary of each documents
+        Get the summary of each documents.
         Args:
             dataset (nlp.Dataset): dataset containing document to summarize
             document_column_name (str): name of the column of the dataset containing documents
@@ -60,21 +60,6 @@ class Baseline(object):
         dataset.drop("num_sentences")
         return dataset
 
-    def generate_hypotheses(
-        self, dataset, document_column_name, summary_colunm_name, **kwargs,
-    ):
-        """
-        Get the extractive summary of each documents based on the reference summary length
-        Args:
-            dataset (nlp.Dataset): dataset containing document to summarize
-            document_column_name (str): name of the column of the dataset containing documents
-            summary_colunm_name (str): name of the column of the dataset containing summaries
-            **kwargs: arguments to pass to the run function
-        Return:
-            summaries (list(str)): summaries of each document 
-        """
-        return self.get_summaries(dataset, document_column_name, **kwargs)
-
     def compute_rouge(
         self,
         dataset,
@@ -95,58 +80,21 @@ class Baseline(object):
             score (dict(Score)): dict of ROUGE types with the score (see nlp metrics for details)
         """
 
-        dataset = self.generate_hypotheses(
-            dataset, document_column_name, summary_colunm_name, **kwargs
+        dataset = self.get_summaries(
+            dataset, document_column_name, **kwargs
         )
 
         rouge_metric = load_metric("rouge")
 
         def compute_rouge_batch(example):
             predictions = example[f"{self.name}_hypothesis"]
-            references = example["summary"]
+            references = example[summary_colunm_name]
             predictions = list(map(lambda s: " ".join(word_tokenize(s)), predictions))
             references = list(map(lambda s: " ".join(word_tokenize(s)), references))
             rouge_metric.add_batch(predictions, references)
 
         dataset.map(compute_rouge_batch, batched=True)
         return dataset, rouge_metric.compute(rouge_types=rouge_types)
-
-    def write_hypotheses(
-        self,
-        dataset,
-        document_column_name,
-        summary_colunm_name,
-        filename,
-        write_ref=False,
-        ref_filename=None,
-        **kwargs,
-    ):
-        """
-        Write the extractive summary of each documents based on the reference summary length in a file
-        Args:
-            dataset (nlp.Dataset): dataset containing document to summarize
-            document_column_name (str): name of the column of the dataset containing documents
-            summary_colunm_name (str): name of the column of the dataset containing summaries
-            filename (str): path to the output file where write hypotheses
-            write_ref (bool): True if save references in ref_filename
-            ref_filename (str): path to the output file where write references
-            **kwargs: arguments to pass to the run function
-        """
-
-        dataset = self.generate_hypotheses(
-            dataset, document_column_name, summary_colunm_name, **kwargs
-        )
-        with open(filename, "w") as f:
-            for hyp in dataset[f"{self.name}_hypothesis"]:
-                f.write(hyp.replace("\n", "") + "\n")
-        if write_ref:
-            if ref_filename == None:
-                raise ValueError(
-                    f"if write_ref set to True ref_filename ({ref_filename}) must be a correct path"
-                )
-            with open(ref_filename, "w") as f:
-                for ref in dataset[summary_colunm_name]:
-                    f.write(ref.replace("\n", "") + "\n")
 
     @staticmethod
     def append_column(dataset, data, column_name):

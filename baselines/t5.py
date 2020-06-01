@@ -9,7 +9,7 @@ from baselines.baseline import Baseline
 class T5(Baseline):
 
     """ Description 
-    Bart model from HuggingFace fine-tuned on cnn
+    T5 model from HuggingFace
     """
 
     def __init__(self, name, model_name, input_max_length, device, batch_size):

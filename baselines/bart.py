@@ -9,13 +9,15 @@ from baselines.baseline import Baseline
 class Bart(Baseline):
 
     """ Description 
-    Bart model from HuggingFace fine-tuned on cnn
+    Bart model from HuggingFace
     """
 
     def __init__(self, name, model_name, input_max_length, device, batch_size):
         super().__init__(name)
-        self.tokenizer = BartTokenizer.from_pretrained(model_name)
-        self.model = BartForConditionalGeneration.from_pretrained(model_name)
+        if isinstance(model_name, str):
+            model_name = [model_name, model_name]
+        self.tokenizer = BartTokenizer.from_pretrained(model_name[0])
+        self.model = BartForConditionalGeneration.from_pretrained(model_name[1])
         self.input_max_length = input_max_length
         self.device = device
         self.batch_size = batch_size
