@@ -12,7 +12,7 @@ import errno
 import torch
 import numpy as np
 from nltk.tokenize import word_tokenize, sent_tokenize
-from extractive_bert_ressources.model import Summarizer
+from baselines.extractive_bert_ressources.model import Summarizer
 
 
 def rename_file(path):
@@ -31,15 +31,17 @@ class ExtractiveBert(Baseline):
     Extractive summarization model from Dmitry. 
     """
 
-    def __init__(self, name, model_folder, reg_file, bert_file, logger, alpha=0.7):
+    def __init__(self, name, model_folder, reg_file, bert_file, alpha=0.7):
         super().__init__(name)
+        logger = logging.getLogger(__name__)
         self.model = Summarizer.from_pretrained(
             model_folder, reg_file, bert_file=bert_file, logger=logger
         )
         self.alpha = alpha
 
-    def rank_sentences(self, dataset, document_column_name, **kwargs):
+    def rank_sentences(self, dataset, document_column_name, num_sentences, **kwargs):
         def run_extractive(example):
+            print("map function")
 
             # Data process
             document = (
@@ -53,12 +55,12 @@ class ExtractiveBert(Baseline):
 
             # Compute importance, sentences and mask
             importance, sentences, mask = self.model(document)
-            importance = torch.nn.Sigmoid(importance).view(importance.shape[0])
+            importance = torch.sigmoid(importance).view(importance.shape[0])
             importance = [element.item() for element in importance.flatten()]
 
             # Order sentences
             summary_sentences = []
-            while len(summary_sentences) < len(sentences):
+            while len(summary_sentences) < num_sentences:
                 relevance = self.model.sentence_relevance(sentences, summary_sentences)
                 final_score = [
                     self.alpha * imp - (1 - self.alpha) * rel
@@ -75,4 +77,5 @@ class ExtractiveBert(Baseline):
             }
             return example
 
-        return dataset.map(run_extractive)
+        dataset = dataset.map(run_extractive)
+        return dataset

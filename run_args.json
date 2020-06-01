@@ -1,9 +1,21 @@
 {
     "baselines": [
+        {
+            "baseline_class": "Extractive Bert", 
+            "init_kwargs": {
+                "name": "Extractive Bert", 
+                "model_folder": "/home/airklizz/Downloads/T5-preprocessing/models/test-rouge2-wiki-bert/", 
+                "reg_file": "reg_test-rouge2-wiki-bert_400.pt", 
+                "bert_file": null, 
+                "alpha": 0.7
+            }, 
+            "run_kwargs": {
+                "num_sentences": 10
+            }
+        },
         {"baseline_class": "Random", "init_kwargs": {"name": "Random"}, "run_kwargs": {"num_sentences": 10}},
         {"baseline_class": "Lead", "init_kwargs": {"name": "Lead"}, "run_kwargs": {"num_sentences": 10}},
-        {"baseline_class": "LexRank", "init_kwargs": {"name": "LexRank"}, "run_kwargs": {"num_sentences": 10, "threshold": 0.03, "increase_power": true}},
-        {"baseline_class": "Extractive Bert", "init_kwargs": {"name": "Extractive Bert"}, "run_kwargs": {}}
+        {"baseline_class": "LexRank", "init_kwargs": {"name": "LexRank"}, "run_kwargs": {"num_sentences": 10, "threshold": 0.03, "increase_power": true}}        
     ],
 
     "dataset": {
