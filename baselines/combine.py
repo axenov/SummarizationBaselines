@@ -2,7 +2,7 @@ from nltk.tokenize import sent_tokenize
 
 from baselines.baseline import Baseline
 
-import baselines.baselines as baselines
+from baselines import baselines
 
 
 class Combine(Baseline):
