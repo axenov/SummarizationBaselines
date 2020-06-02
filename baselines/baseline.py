@@ -39,7 +39,7 @@ class Baseline(object):
         dataset = self.rank_sentences(dataset, document_column_name, **kwargs)
         num_sentences = kwargs["num_sentences"]
 
-        if isinstance(num_sentences, int):
+        if isinstance(num_sentences, int) or num_sentences == None:
             num_sentences = [num_sentences for i in range(len(dataset))]
         if len(num_sentences) != len(dataset):
             raise ValueError("documents and num_sentences must have the same length")
