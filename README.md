@@ -7,13 +7,14 @@ Implementation of extractive summarization baselines. For the moment there are:
 - LexRank: Compute similarity between sentences and select the n first sentences ranked using PageRank style algorithm
 - Bart: Transformer model. Implementation thanks [huggingface](https://huggingface.co/).
 - T5: Transformer model. Implementation thanks [huggingface](https://huggingface.co/).
+- ExtractiveBert: Using Bert to rank sentences.
 
 > More baselines to come
 
 ## Installation
 
 ```
-git clone https://github.com/airKlizz/SummarizationBaselines
+git clone -b extractive-bert https://github.com/airKlizz/SummarizationBaselines
 cd SummarizationBaselines
 ```
 
@@ -36,63 +37,22 @@ This is an example of a ``run_args.json`` file:
 ```json
 {
     "baselines": [
+        {
+            "baseline_class": "Extractive Bert", 
+            "init_kwargs": {
+                "name": "Extractive Bert", 
+                "model_folder": "/content/drive/My Drive/Github/SummarizationBaselines/models/test-rouge2-wiki-bert/", 
+                "reg_file": "reg_test-rouge2-wiki-bert_400.pt", 
+                "bert_file": null, 
+                "alpha": 0.7
+            }, 
+            "run_kwargs": {
+                "num_sentences": 10
+            }
+        },
         {"baseline_class": "Random", "init_kwargs": {"name": "Random"}, "run_kwargs": {"num_sentences": 10}},
         {"baseline_class": "Lead", "init_kwargs": {"name": "Lead"}, "run_kwargs": {"num_sentences": 10}},
-        {"baseline_class": "LexRank", "init_kwargs": {"name": "LexRank"}, "run_kwargs": {"num_sentences": 10, "threshold": 0.03, "increase_power": true}},
-        {
-            "baseline_class": "Bart", 
-            "init_kwargs": {
-                "name": "Bart CNN",
-                "model_name": "bart-large-cnn",
-                "input_max_length": 512,
-                "device": "cuda",
-                "batch_size": 8
-            }, 
-            "run_kwargs": {
-                "num_beams": 4,
-                "length_penalty": 2.0,
-                "max_length": 400,
-                "min_length": 200,
-                "no_repeat_ngram_size": 3,
-                "early_stopping": true
-            }
-        },
-        {
-            "baseline_class": "T5", 
-            "init_kwargs": {
-                "name": "T5 base",
-                "model_name": "t5-base",
-                "input_max_length": 512,
-                "device": "cuda",
-                "batch_size": 8
-            }, 
-            "run_kwargs": {
-                "num_beams": 4,
-                "length_penalty": 2.0,
-                "max_length": 400,
-                "min_length": 200,
-                "no_repeat_ngram_size": 3,
-                "early_stopping": true
-            }
-        },
-        {
-            "baseline_class": "T5", 
-            "init_kwargs": {
-                "name": "T5 fine tuned",
-                "model_name": ["t5-base", "/content/drive/My Drive/Colab Notebooks/Multi-wiki-news/English/t5-wild-glitter-2"],
-                "input_max_length": 512,
-                "device": "cuda",
-                "batch_size": 8
-            }, 
-            "run_kwargs": {
-                "num_beams": 4,
-                "length_penalty": 2.0,
-                "max_length": 400,
-                "min_length": 200,
-                "no_repeat_ngram_size": 3,
-                "early_stopping": true
-            }
-        }
+        {"baseline_class": "LexRank", "init_kwargs": {"name": "LexRank"}, "run_kwargs": {"num_sentences": 10, "threshold": 0.03, "increase_power": true}}        
     ],
 
     "dataset": {
@@ -113,6 +73,7 @@ This is an example of a ``run_args.json`` file:
             "rougeL": ["mid.fmeasure"]
         }
     }
+        
 }
 ```
 
@@ -144,11 +105,9 @@ Then just add you baseline on the ``baselines/baselines.py`` file by adding a ``
 
 |     | rouge1.mid.fmeasure | rouge2.mid.fmeasure | rougeL.mid.fmeasure |
 | --- | --- | --- | --- |
-| Random | 37.84% | 11.95% | 17.30% |
-| Lead | 37.48% | 12.34% | 17.75% |
-| LexRank | 40.08% | 13.82% | 18.33% |
-| Bart CNN | 37.44% | 12.00% | 18.55% |
-| T5 base | 22.90% | 6.82% | 12.92% |
-| T5 fine tuned | 41.38% | 16.14% | 22.58% |
+| Random | 37.77% | 11.95% | 17.30% |
+| Lead | 37.47% | 12.35% | 17.73% |
+| LexRank | 40.06% | 13.87% | 18.34% |
+| Extractive Bert | 38.33% | 12.13% | 16.95% |
 
 > Table obtained by running the example ``run_args.json`` file and the table is automatically generated in ``results.md``.
