@@ -1,7 +1,11 @@
 from nltk.tokenize import sent_tokenize
 
 from baselines.baseline import Baseline
-from baselines.baselines import use
+
+try:
+    from baselines.baselines import use
+except ImportError:
+    from baselines import use
 
 
 class Combine(Baseline):
