@@ -88,9 +88,9 @@
         "csv_file": "results.csv",
         "md_file": "results.md",
         "rouge_types": {
-            "rouge1": ["mid.fmeasure"],
-            "rouge2": ["mid.fmeasure"],
-            "rougeL": ["mid.fmeasure"]
+            "rouge1": ["mid.precision", "mid.recall", "mid.fmeasure"],
+            "rouge2": ["mid.precision", "mid.recall", "mid.fmeasure"],
+            "rougeL": ["mid.precision", "mid.recall", "mid.fmeasure"]
         }
     }
         

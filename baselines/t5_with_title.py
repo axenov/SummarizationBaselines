@@ -25,7 +25,9 @@ class T5WithTitle(Baseline):
     def get_summaries(
         self, dataset, document_column_name, title_column_name, **kwargs,
     ):
-        dataloader = self.prepare_dataset(dataset, document_column_name, title_column_name)
+        dataloader = self.prepare_dataset(
+            dataset, document_column_name, title_column_name
+        )
         self.model = self.model.to(self.device)
 
         hypotheses = []
@@ -48,7 +50,10 @@ class T5WithTitle(Baseline):
 
     def prepare_dataset(self, dataset, document_column_name, title_column_name):
         def add_eos_to_examples(example, document_column_name=document_column_name):
-            example["input_text"] = "title: %s  summarize: %s </s>" % (example[title_column_name], example[document_column_name])
+            example["input_text"] = "title: %s  summarize: %s </s>" % (
+                example[title_column_name],
+                example[document_column_name],
+            )
             return example
 
         def convert_to_features(
