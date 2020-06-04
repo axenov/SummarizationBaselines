@@ -106,7 +106,7 @@ Then just add you baseline on the ``baselines/baselines.py`` file by adding a ``
 |     | rouge1.mid.fmeasure | rouge2.mid.fmeasure | rougeL.mid.fmeasure |
 | --- | --- | --- | --- |
 | Random | 37.81% | 11.91% | 17.30% |
-| Lead | 37.47% | 12.33% | 17.70% |
+| Random 2 (former Lead) | 37.47% | 12.33% | 17.70% |
 | Lead (sorted) | 41.42% | 15.56% | 21.61% |
 | RougeOracle-rouge1-recall | 44.75% | 19.68% | 20.11% |
 | RougeOracle-rouge1-precision | 50.66% | 26.41% | 23.65% |
