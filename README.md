@@ -117,6 +117,7 @@ Then just add you baseline on the ``baselines/baselines.py`` file by adding a ``
 | RougeOracle-rougeL-precision | 48.79% | 26.01% | 23.65% |
 | RougeOracle-rougeL-f1 | 47.06% | 22.55% | 20.85% |
 | RougeOracleGreedy-rouge2-recall | 49.62% | 26.63% | 23.00% |
+| RougeOracleGreedy-rouge2-recall (sorted) | 49.62% | 26.73% | 28.20% |
 | LexRank | 40.06% | 13.87% | 18.34% |
 | Extractive Bert | 38.33% | 12.13% | 16.95% |
 

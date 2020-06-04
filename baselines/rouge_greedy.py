@@ -54,9 +54,11 @@ class RougeOracleGreedy(Baseline):
                 else:
                     break
             # Add to new column
+            summary_sentences_scores = [max(summary_sentences_indexes)-x for x in summary_sentences_indexes]
+            #summary_sentences_scores = list(range(1, len(summary_sentences) + 1))[::-1]
             example[self.name] = {
                 "sentences": summary_sentences,
-                "scores": list(range(1, len(summary_sentences) + 1))[::-1],
+                "scores": summary_sentences_scores,
             }
             return example
 
