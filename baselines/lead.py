@@ -20,7 +20,9 @@ class Lead(Baseline):
             return senteces
 
         all_sentences = list(map(split_sentences, dataset[document_column_name]))
-        scores = [[1 for sentence in sentences] for sentences in all_sentences]
+        #scores = [[1 for sentence in sentences] for sentences in all_sentences]
+        #Sorted
+        scores = [list(range(len(sentences)))[::-1] for sentences in all_sentences]
         data = [
             {"sentences": sentences, "scores": scores}
             for sentences, scores in zip(all_sentences, scores)

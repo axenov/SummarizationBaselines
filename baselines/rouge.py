@@ -39,6 +39,7 @@ class RougeOracle(Baseline):
             sentences_index = list(range(len(sentences)))
             reference = example[kwargs['summary_colunm_name']]
             scores = [self.calculate_rouge(sent,reference) for sent in sentences]
+            #print(len(sentences))
 
             # Order sentences
             summary_sentences = []
@@ -52,8 +53,9 @@ class RougeOracle(Baseline):
                 scores.pop(idx)
                 sentences.pop(idx)
                 sentences_index.pop(idx)
-
+            #print(sorted(summary_sentences_indexes))
             # Add to new column
+            #Sorted
             summary_sentences_scores = [max(summary_sentences_indexes)-x for x in summary_sentences_indexes]
             #summary_sentences_scores = list(range(1, len(summary_sentences) + 1))[::-1]
             example[self.name] = {
