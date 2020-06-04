@@ -1,5 +1,6 @@
 from nltk.tokenize import sent_tokenize
 from rouge_score import rouge_scorer
+import numpy as np
 
 from baselines.baseline import Baseline
 
@@ -24,18 +25,42 @@ class RougeOracle(Baseline):
         rouge_score = sum([scores[score][ind] for score in self.rougeType])/len(self.rougeType)
         return rouge_score
 
-    def rank_sentences(self, dataset, document_column_name, **kwargs):
+
+    def rank_sentences(self, dataset, document_column_name, num_sentences, **kwargs):
         def split_sentences(document):
             texts = document.split("|||")
             senteces = []
             for text in texts:
                 senteces += sent_tokenize(text)
             return senteces
-        all_sentences = list(map(split_sentences, dataset[document_column_name]))
-        all_summaries = dataset[kwargs['summary_colunm_name']]
-        scores =  [[self.calculate_rouge(sent,summary) for sent in sentences] for sentences,summary in zip(all_sentences,all_summaries)]
-        data = [
-            {"sentences": sentences, "scores": scores}
-            for sentences, scores in zip(all_sentences, scores)
-        ]
-        return Baseline.append_column(dataset, data, self.name)
+
+        def run_extractive(example):
+            sentences = split_sentences(example[document_column_name])
+            sentences_index = list(range(len(sentences)))
+            reference = example[kwargs['summary_colunm_name']]
+            scores = [self.calculate_rouge(sent,reference) for sent in sentences]
+
+            # Order sentences
+            summary_sentences = []
+            summary_sentences_indexes = []
+
+            while len(summary_sentences) < min(len(sentences),num_sentences):
+                idx = np.argmax(scores)
+                test_sentence = sentences[idx]
+                summary_sentences.append(test_sentence)
+                summary_sentences_indexes.append(sentences_index[idx])
+                scores.pop(idx)
+                sentences.pop(idx)
+                sentences_index.pop(idx)
+
+            # Add to new column
+            summary_sentences_scores = [max(summary_sentences_indexes)-x for x in summary_sentences_indexes]
+            #summary_sentences_scores = list(range(1, len(summary_sentences) + 1))[::-1]
+            example[self.name] = {
+                "sentences": summary_sentences,
+                "scores": summary_sentences_scores,
+            }
+            return example
+
+        dataset = dataset.map(run_extractive)
+        return dataset

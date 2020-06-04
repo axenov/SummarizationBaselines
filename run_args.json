@@ -1,6 +1,6 @@
 {
     "baselines": [
-        {"baseline_class": "RougeOracleGreedy", "init_kwargs": {"name": "RougeOracleGreedy-rouge2-recall", "rougeType": ["rouge2"], "rougeMethod": "recall"}, "run_kwargs": {"num_sentences": 10}}
+        {"baseline_class": "RougeOracle", "init_kwargs": {"name": "RougeOracle-rouge2-recall", "rougeType": ["rouge2"], "rougeMethod": "recall"}, "run_kwargs": {"num_sentences": 10}}
     ],
 
     "dataset": {
