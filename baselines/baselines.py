@@ -3,6 +3,8 @@ from baselines.lead import Lead
 from baselines.lexrank import LexRank
 from baselines.bart import Bart
 from baselines.t5 import T5
+from baselines.rouge import RougeOracle
+from baselines.rouge_greedy import RougeOracleGreedy
 from baselines.extractive_bert import ExtractiveBert
 
 # from baselines.mmr import mmr
@@ -14,6 +16,10 @@ def use(baseline_class, **init_kwargs):
         return Random(**init_kwargs)
     if baseline_class == "Lead":
         return Lead(**init_kwargs)
+    if baseline_class == "RougeOracle":
+        return RougeOracle(**init_kwargs)
+    if baseline_class == "RougeOracleGreedy":
+        return RougeOracleGreedy(**init_kwargs)
     if baseline_class == "LexRank":
         return LexRank(**init_kwargs)
     if baseline_class == "Bart":

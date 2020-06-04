@@ -105,8 +105,18 @@ Then just add you baseline on the ``baselines/baselines.py`` file by adding a ``
 
 |     | rouge1.mid.fmeasure | rouge2.mid.fmeasure | rougeL.mid.fmeasure |
 | --- | --- | --- | --- |
-| Random | 37.77% | 11.95% | 17.30% |
-| Lead | 37.47% | 12.35% | 17.73% |
+| Random | 37.81% | 11.91% | 17.30% |
+| Lead | 37.47% | 12.33% | 17.70% |
+| RougeOracle-rouge1-recall | 44.75% | 19.68% | 20.11% |
+| RougeOracle-rouge1-precision | 50.66% | 26.41% | 23.65% |
+| RougeOracle-rouge1-f1 | 45.60% | 20.26% | 20.40% |
+| RougeOracle-rouge2-recall | 48.99% | 25.58% | 21.73% |
+| RougeOracle-rouge2-precision | 49.71% | 27.65% | 23.25% |
+| RougeOracle-rouge2-f1 | 49.73% | 26.20% | 22.04% |
+| RougeOracle-rougeL-recall | 46.04% | 21.76% | 20.55% |
+| RougeOracle-rougeL-precision | 48.79% | 26.01% | 23.65% |
+| RougeOracle-rougeL-f1 | 47.06% | 22.55% | 20.85% |
+| RougeOracleGreedy-rouge2-recall | 49.62% | 26.63% | 23.00% |
 | LexRank | 40.06% | 13.87% | 18.34% |
 | Extractive Bert | 38.33% | 12.13% | 16.95% |
 

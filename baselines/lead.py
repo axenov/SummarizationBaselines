@@ -12,9 +12,15 @@ class Lead(Baseline):
     """
 
     def rank_sentences(self, dataset, document_column_name, **kwargs):
-        all_sentences = list(map(sent_tokenize, dataset[document_column_name]))
-        scores = [[1 for sentence in sentences] for sentences in all_sentences]
+        def split_sentences(document):
+            texts = document.split("|||")
+            senteces = []
+            for text in texts:
+                senteces += sent_tokenize(text)
+            return senteces
 
+        all_sentences = list(map(split_sentences, dataset[document_column_name]))
+        scores = [[1 for sentence in sentences] for sentences in all_sentences]
         data = [
             {"sentences": sentences, "scores": scores}
             for sentences, scores in zip(all_sentences, scores)

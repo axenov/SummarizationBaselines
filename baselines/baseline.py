@@ -47,6 +47,7 @@ class Baseline(object):
         dataset = Baseline.append_column(dataset, num_sentences, "num_sentences")
 
         def get_extractive_summary(example):
+            np.random.seed(5)
             scores = np.array(example[self.name]["scores"])
             sentences = example[self.name]["sentences"]
             sorted_ix = np.argsort(scores)[::-1]
@@ -79,8 +80,9 @@ class Baseline(object):
         Return:
             score (dict(Score)): dict of ROUGE types with the score (see nlp metrics for details)
         """
-
-        dataset = self.get_summaries(dataset, document_column_name, **kwargs)
+        kwargs_with_summmary = kwargs
+        kwargs_with_summmary['summary_colunm_name'] = summary_colunm_name
+        dataset = self.get_summaries(dataset, document_column_name, **kwargs_with_summmary)
 
         rouge_metric = load_metric("rouge")
 
