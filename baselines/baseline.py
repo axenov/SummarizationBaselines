@@ -47,13 +47,17 @@ class Baseline(object):
         dataset = Baseline.append_column(dataset, num_sentences, "num_sentences")
 
         def get_extractive_summary(example):
-            np.random.seed(5)
             scores = np.array(example[self.name]["scores"])
             sentences = example[self.name]["sentences"]
+
+            #Rank sentenses
+            np.random.seed(5)
             sorted_ix = np.argsort(scores)[::-1]
-            hyp = " ".join(
-                [sentences[j] for j in sorted_ix[: example["num_sentences"]]]
-            )
+            sorted_ix_summary = sorted_ix[: min(len(sentences),example["num_sentences"])]
+            sorted_ix_summary = np.sort(sorted_ix_summary)
+            summary_sentences = [sentences[j] for j in sorted_ix_summary]
+
+            hyp = " ".join(summary_sentences)
             example[f"{self.name}_hypothesis"] = hyp
             return example
 

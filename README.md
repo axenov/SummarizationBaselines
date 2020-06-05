@@ -105,22 +105,23 @@ Then just add you baseline on the ``baselines/baselines.py`` file by adding a ``
 
 |     | rouge1.mid.fmeasure | rouge2.mid.fmeasure | rougeL.mid.fmeasure |
 | --- | --- | --- | --- |
-| Random | 37.81% | 11.91% | 17.30% |
-| Random 2 (former Lead) | 37.47% | 12.33% | 17.70% |
-| Lead (sorted) | 41.42% | 15.56% | 21.61% |
-| RougeOracle-rouge1-recall | 44.75% | 19.68% | 20.11% |
-| RougeOracle-rouge1-precision | 50.66% | 26.41% | 23.65% |
-| RougeOracle-rouge1-f1 | 45.60% | 20.26% | 20.40% |
-| RougeOracle-rouge2-recall | 48.99% | 25.58% | 21.73% |
-| RougeOracle-rouge2-precision | 49.71% | 27.65% | 23.25% |
-| RougeOracle-rouge2-f1 | 49.73% | 26.20% | 22.04% |
-| RougeOracle-rougeL-recall | 46.04% | 21.76% | 20.55% |
-| RougeOracle-rougeL-precision | 48.79% | 26.01% | 23.65% |
-| RougeOracle-rougeL-f1 | 47.06% | 22.55% | 20.85% |
-| RougeOracle-rouge2-recall (sorted) | 49.27% | 25.75% | 27.39% |
-| RougeOracleGreedy-rouge2-recall | 49.62% | 26.63% | 23.00% |
-| RougeOracleGreedy-rouge2-recall (sorted) | 49.62% | 26.73% | 28.20% |
-| LexRank | 40.06% | 13.87% | 18.34% |
-| Extractive Bert | 38.33% | 12.13% | 16.95% |
+| Lead | 41.42% | 15.56% | 21.61% |
+| LexRank | 40.14% | 13.86% | 19.17% |
+| LexRank (unsorted) | 40.14% | 13.84% | 18.29% |
+| Random | 37.81% | 11.94% | 18.07% |
+| Random (unsorted) | 37.81% | 11.91% | 17.30% |
+| RougeOracle-rouge1-recall | 44.75% | 19.72% | 23.05% |
+| RougeOracle-rouge1-precision | 50.66% | 26.54% | 28.95% |
+| RougeOracle-rouge1-f1 | 45.60% | 20.32% | 23.56% |
+| RougeOracle-rouge2-recall | 48.99% | 25.70% | 27.17% |
+| RougeOracle-rouge2-precision | 49.71% | 27.83% | 28.99% |
+| RougeOracle-rouge2-f1 | 49.73% | 26.34% | 27.76% |
+| RougeOracle-rougeL-recall | 46.04% | 21.82% | 24.66% |
+| RougeOracle-rougeL-precision | 48.79% | 26.20% | 28.91% |
+| RougeOracle-rougeL-f1 | 47.06% | 22.64% | 25.43% |
+| RougeOracleGreedy-rouge2-recall | 49.62% | 26.73% | 28.20% |
+| RougeOracleGreedy-rouge2-recall (unsorted) | 49.62% | 26.63% | 23.00% |
+| Extractive Bert (old) | 38.33% | 12.13% | 16.95% |
+| Extractive Bert (old sorted) | 38.42% | 12.12% | 17.76% |
 
 > Table obtained by running the example ``run_args.json`` file and the table is automatically generated in ``results.md``.

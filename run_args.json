@@ -1,7 +1,21 @@
 {
     "baselines": [
         {"baseline_class": "Lead", "init_kwargs": {"name": "Lead"}, "run_kwargs": {"num_sentences": 10}},
-        {"baseline_class": "RougeOracle", "init_kwargs": {"name": "RougeOracle-rouge2-recall", "rougeType": ["rouge2"], "rougeMethod": "recall"}, "run_kwargs": {"num_sentences": 10}}
+        {"baseline_class": "Random", "init_kwargs": {"name": "Random"}, "run_kwargs": {"num_sentences": 10}},
+        {"baseline_class": "LexRank", "init_kwargs": {"name": "LexRank"}, "run_kwargs": {"num_sentences": 10}},
+
+        {"baseline_class": "RougeOracle", "init_kwargs": {"name": "RougeOracle-rouge1-recall", "rougeType": ["rouge1"], "rougeMethod": "recall"}, "run_kwargs": {"num_sentences": 10}},
+        {"baseline_class": "RougeOracle", "init_kwargs": {"name": "RougeOracle-rouge1-precision", "rougeType": ["rouge1"], "rougeMethod": "precision"}, "run_kwargs": {"num_sentences": 10}},
+        {"baseline_class": "RougeOracle", "init_kwargs": {"name": "RougeOracle-rouge1-f1", "rougeType": ["rouge1"], "rougeMethod": "f1"}, "run_kwargs": {"num_sentences": 10}},
+
+        {"baseline_class": "RougeOracle", "init_kwargs": {"name": "RougeOracle-rouge2-recall", "rougeType": ["rouge2"], "rougeMethod": "recall"}, "run_kwargs": {"num_sentences": 10}},
+        {"baseline_class": "RougeOracle", "init_kwargs": {"name": "RougeOracle-rouge2-precision", "rougeType": ["rouge2"], "rougeMethod": "precision"}, "run_kwargs": {"num_sentences": 10}},
+        {"baseline_class": "RougeOracle", "init_kwargs": {"name": "RougeOracle-rouge2-f1", "rougeType": ["rouge2"], "rougeMethod": "f1"}, "run_kwargs": {"num_sentences": 10}},
+
+        {"baseline_class": "RougeOracle", "init_kwargs": {"name": "RougeOracle-rougeL-recall", "rougeType": ["rougeL"], "rougeMethod": "recall"}, "run_kwargs": {"num_sentences": 10}},
+        {"baseline_class": "RougeOracle", "init_kwargs": {"name": "RougeOracle-rougeL-precision", "rougeType": ["rougeL"], "rougeMethod": "precision"}, "run_kwargs": {"num_sentences": 10}},
+        {"baseline_class": "RougeOracle", "init_kwargs": {"name": "RougeOracle-rougeL-f1", "rougeType": ["rougeL"], "rougeMethod": "f1"}, "run_kwargs": {"num_sentences": 10}}
+
     ],
 
     "dataset": {

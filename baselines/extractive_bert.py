@@ -60,8 +60,11 @@ class ExtractiveBert(Baseline):
             importance = [element.item() for element in importance.flatten()]
 
             # Order sentences
+            sentences_index = list(range(len(sentences)))
             summary_sentences = []
-            while len(summary_sentences) < num_sentences:
+            summary_sentences_indexes = []
+
+            while len(summary_sentences) < min(len(sentences),num_sentences):
                 relevance = self.model.sentence_relevance(sentences, summary_sentences)
                 final_score = [
                     self.alpha * imp - (1 - self.alpha) * rel
@@ -70,11 +73,15 @@ class ExtractiveBert(Baseline):
                 idx = np.argmax(final_score)
                 importance[idx] = -1
                 summary_sentences.append(sentences[idx])
+                summary_sentences_indexes.append(idx)
 
+            #Sorted
+            summary_sentences_scores = [max(summary_sentences_indexes)-x for x in summary_sentences_indexes]
+            #summary_sentences_scores = list(range(1, len(summary_sentences) + 1))[::-1]
             # Add to new column
             example[self.name] = {
                 "sentences": summary_sentences,
-                "scores": list(range(1, len(summary_sentences) + 1))[::-1],
+                "scores": summary_sentences_scores,
             }
             return example
 

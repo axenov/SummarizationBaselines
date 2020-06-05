@@ -36,31 +36,12 @@ class RougeOracle(Baseline):
 
         def run_extractive(example):
             sentences = split_sentences(example[document_column_name])
-            sentences_index = list(range(len(sentences)))
             reference = example[kwargs['summary_colunm_name']]
             scores = [self.calculate_rouge(sent,reference) for sent in sentences]
-            #print(len(sentences))
-
-            # Order sentences
-            summary_sentences = []
-            summary_sentences_indexes = []
-
-            while len(summary_sentences) < min(len(sentences),num_sentences):
-                idx = np.argmax(scores)
-                test_sentence = sentences[idx]
-                summary_sentences.append(test_sentence)
-                summary_sentences_indexes.append(sentences_index[idx])
-                scores.pop(idx)
-                sentences.pop(idx)
-                sentences_index.pop(idx)
-            #print(sorted(summary_sentences_indexes))
             # Add to new column
-            #Sorted
-            summary_sentences_scores = [max(summary_sentences_indexes)-x for x in summary_sentences_indexes]
-            #summary_sentences_scores = list(range(1, len(summary_sentences) + 1))[::-1]
             example[self.name] = {
-                "sentences": summary_sentences,
-                "scores": summary_sentences_scores,
+                "sentences": sentences,
+                "scores": scores,
             }
             return example
 
