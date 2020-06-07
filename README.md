@@ -2,7 +2,7 @@
 
 # Summarization Baselines
 
-Implementation of extractive summarization baselines. For the moment there are:
+Implementation of summarization baselines. For the moment there are:
 
 - Random: Select n sentences randomly.
 - Lead: Select the n first sentences.
