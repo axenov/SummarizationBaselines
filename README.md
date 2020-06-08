@@ -144,13 +144,11 @@ Then just add you baseline on the ``baselines/baselines.py`` file by adding a ``
 
 ## Results for ``en-wiki-multi-news``
 
-|     | rouge1.mid.fmeasure | rouge2.mid.fmeasure | rougeL.mid.fmeasure |
-| --- | --- | --- | --- |
-| Random | 37.84% | 11.95% | 17.30% |
-| Lead | 37.48% | 12.34% | 17.75% |
-| LexRank | 40.08% | 13.82% | 18.33% |
-| Bart CNN | 37.44% | 12.00% | 18.55% |
-| T5 base | 22.90% | 6.82% | 12.92% |
-| T5 fine tuned | 41.38% | 16.14% | 22.58% |
-
-> Table obtained by running the example ``run_args.json`` file and the table is automatically generated in ``results.md``.
+|     | rouge1.mid.precision | rouge1.mid.recall | rouge1.mid.fmeasure | rouge2.mid.precision | rouge2.mid.recall | rouge2.mid.fmeasure | rougeL.mid.precision | rougeL.mid.recall | rougeL.mid.fmeasure |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| LexRank and T5 fine-tuned w/ LexRank | 46.54% | 39.30% | 40.28% | 16.09% | 13.27% | 13.73% | 23.20% | 20.03% | 20.23% |
+| LexRank and T5 fine-tuned w LexRank| 47.31% | 37.86% | 39.82% | 16.55% | 12.89% | 13.73% | 24.24% | 19.58% | 20.42% |
+| Bart CNN | 46.66% | 34.55% | 37.48% | 15.31% | 10.94% | 12.02% | 23.08% | 17.25% | 18.54% |
+| T5 base | 30.91% | 20.17% | 22.90% | 9.30% | 5.96% | 6.82% | 17.55% | 11.40% | 12.93% |
+| T5 fine tuned | 48.36% | 39.90% | 41.39% | 19.10% | 15.42% | 16.15% | 26.40% | 21.88% | 22.59% |
+| T5 with title fine tuned | 49.30% | 40.81% | 42.15% | 19.87% | 16.16% | 16.81% | 27.09% | 22.52% | 23.14% |
