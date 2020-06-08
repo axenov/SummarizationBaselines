@@ -9,7 +9,6 @@ from parser import parse_json_file
 parser = argparse.ArgumentParser()
 parser.add_argument("--run_args_file", help="Path to the args json file", type=str)
 json_args = parser.parse_args()
-print(json_args.run_args_file)
 
 args = parse_json_file(json_args.run_args_file)
 
