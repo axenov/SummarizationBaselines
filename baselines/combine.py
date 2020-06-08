@@ -61,7 +61,7 @@ class Combine(Baseline):
     ):
         truncated_sentences = []
         i = 0
-        while self.num_words(" ".join(truncated_sentences)) < input_max_length:
+        while self._num_words(" ".join(truncated_sentences)) < input_max_length:
             truncated_sentences.append(ranked_sentences[i])
             i += 1
 
