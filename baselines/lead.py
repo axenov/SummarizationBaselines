@@ -13,7 +13,7 @@ class Lead(Baseline):
 
     def rank_sentences(self, dataset, document_column_name, **kwargs):
         all_sentences = list(map(sent_tokenize, dataset[document_column_name]))
-        scores = [[1 for sentence in sentences] for sentences in all_sentences]
+        scores = [list(range(len(sentences)))[::-1] for sentences in all_sentences]
 
         data = [
             {"sentences": sentences, "scores": scores}
