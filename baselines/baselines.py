@@ -4,6 +4,7 @@ from baselines.lexrank import LexRank
 from baselines.lexrank_v2 import LexRankV2
 from baselines.textrank import TextRank
 from baselines.tfidf import TFIDF
+from baselines.rouge_oracle import RougeOracle
 from baselines.bart import Bart
 from baselines.t5 import T5
 from baselines.t5_with_title import T5WithTitle
@@ -23,6 +24,8 @@ def use(baseline_class, **init_kwargs):
         return TextRank(**init_kwargs)
     if baseline_class == "TFIDF":
         return TFIDF(**init_kwargs)
+    if baseline_class == "RougeOracle":
+        return RougeOracle(**init_kwargs)
     if baseline_class == "Bart":
         return Bart(**init_kwargs)
     if baseline_class == "T5":

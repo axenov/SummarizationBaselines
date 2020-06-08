@@ -5,7 +5,7 @@ from pathlib import Path
 
 from parser import parse_json_file
 
-args = parse_json_file("run_args.json")
+args = parse_json_file("run_args_extractives.json")
 
 # Load dataset
 dataset = load_dataset(

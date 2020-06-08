@@ -1,4 +1,5 @@
-from nltk.tokenize import sent_tokenize
+from nltk.tokenize import sent_tokenize, word_tokenize
+from string import punctuation
 
 from baselines.baseline import Baseline
 
@@ -27,14 +28,49 @@ class Combine(Baseline):
         self, dataset, document_column_name, extractive_args, abstractive_args
     ):
         # Extractive step
-        dataset = self.extractive.get_summaries(
+        dataset = self.extractive.rank_sentences(
             dataset, document_column_name, **extractive_args
         )
+
+        # Truncate best sentences to the input length of the model
+        # and re-order sentences based on their original order in the document
+        def truncate_and_order_example(example):
+            scores = np.array(example[self.extractive.name]["scores"])
+            sentences = example[self.extractive.name]["sentences"]
+            sorted_ix = np.argsort(scores)[::-1]
+            ranked_sentences = [sentences[j] for j in sorted_ix]
+            truncated_and_ordered_sentences = self._truncate_and_order(
+                sentences, ranked_sentences, self.abstractive.input_max_length
+            )
+            example["abstractive_input"] = " ".join(truncated_and_ordered_sentences)
+            return example
+
+        dataset = dataset.map(get_extractive_summary)
 
         # Abstractive step
         self.abstractive.name = self.name
         dataset = self.abstractive.get_summaries(
-            dataset, f"{self.extractive.name}_hypothesis", **abstractive_args
+            dataset, "abstractive_input", **abstractive_args
         )
 
         return dataset
+
+    def _truncate_and_order(
+        self, original_sentences, ranked_sentences, input_max_length
+    ):
+        truncated_sentences = []
+        i = 0
+        while self.num_words(" ".join(truncated_sentences)) < input_max_length:
+            truncated_sentences.append(ranked_sentences[i])
+            i += 1
+
+        truncated_and_ordered_sentences = []
+        for sentence in original_sentences:
+            if sentence in truncated_sentences:
+                truncated_and_ordered_sentences.append(sentence)
+
+        return truncated_and_ordered_sentences
+
+    def _num_words(self, text):
+        text = text.translate(str.maketrans(punctuation, " " * len(punctuation)))
+        return len(text.split(" "))

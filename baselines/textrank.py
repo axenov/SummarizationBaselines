@@ -15,12 +15,7 @@ class TextRank(Baseline):
     Code from: https://medium.com/analytics-vidhya/sentence-extraction-using-textrank-algorithm-7f5c8fd568cd
     """
 
-    def rank_sentences(
-        self,
-        dataset,
-        document_column_name,
-        **kwargs
-    ):
+    def rank_sentences(self, dataset, document_column_name, **kwargs):
         all_sentences = []
         all_scores = []
         for document in dataset[document_column_name]:
@@ -43,7 +38,7 @@ class TextRank(Baseline):
         similarity_matrix = self._build_similarity_matrix(tokenized_sentences)
 
         # Run PageRank
-        scores = self._run_page_rank(similarity_matrix)    
+        scores = self._run_page_rank(similarity_matrix)
 
         return sentences, list(scores)
 
@@ -56,14 +51,18 @@ class TextRank(Baseline):
                 if idx1 == idx2:
                     continue
 
-                sm[idx1][idx2] = sentence_similarity(sentences[idx1], sentences[idx2], stopwords=stopwords)
+                sm[idx1][idx2] = sentence_similarity(
+                    sentences[idx1], sentences[idx2], stopwords=stopwords
+                )
 
         # Get Symmeric matrix
         sm = get_symmetric_matrix(sm)
 
         # Normalize matrix by column
         norm = np.sum(sm, axis=0)
-        sm_norm = np.divide(sm, norm, where=norm != 0)  # this is to ignore the 0 element in norm
+        sm_norm = np.divide(
+            sm, norm, where=norm != 0
+        )  # this is to ignore the 0 element in norm
 
         return sm_norm
 
@@ -93,7 +92,6 @@ class TextRank(Baseline):
 
         return cosine_similarity([vector1], [vector2])[0][0]
 
-
     def _run_page_rank(self, similarity_matrix):
         # constants
         damping = 0.85  # damping coefficient, usually is .85
@@ -105,7 +103,9 @@ class TextRank(Baseline):
         # Iteration
         previous_pr = 0
         for epoch in range(steps):
-            pr_vector = (1 - damping) + damping * np.matmul(similarity_matrix, pr_vector)
+            pr_vector = (1 - damping) + damping * np.matmul(
+                similarity_matrix, pr_vector
+            )
             if abs(previous_pr - sum(pr_vector)) < min_diff:
                 break
             else:

@@ -20,12 +20,7 @@ class LexRankV2(Baseline):
     PageRank function from: https://medium.com/analytics-vidhya/sentence-extraction-using-textrank-algorithm-7f5c8fd568cd
     """
 
-    def rank_sentences(
-        self,
-        dataset,
-        document_column_name,
-        **kwargs
-    ):
+    def rank_sentences(self, dataset, document_column_name, **kwargs):
         all_sentences = []
         all_scores = []
         for document in dataset[document_column_name]:
@@ -49,10 +44,9 @@ class LexRankV2(Baseline):
         similarity_matrix = cosine_similarity(documents_vector)
 
         # Run PageRank
-        scores = self._run_page_rank(similarity_matrix)    
+        scores = self._run_page_rank(similarity_matrix)
 
         return sentences, list(scores)
-
 
     def _run_page_rank(self, similarity_matrix):
         # constants
@@ -65,7 +59,9 @@ class LexRankV2(Baseline):
         # Iteration
         previous_pr = 0
         for epoch in range(steps):
-            pr_vector = (1 - damping) + damping * np.matmul(similarity_matrix, pr_vector)
+            pr_vector = (1 - damping) + damping * np.matmul(
+                similarity_matrix, pr_vector
+            )
             if abs(previous_pr - sum(pr_vector)) < min_diff:
                 break
             else:

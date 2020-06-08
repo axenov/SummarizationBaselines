@@ -16,16 +16,16 @@ class TFIDF(Baseline):
     """
 
     def rank_sentences(
-        self,
-        dataset,
-        document_column_name,
-        title_column_name,
-        **kwargs,
+        self, dataset, document_column_name, title_column_name, **kwargs,
     ):
         all_sentences = []
         all_scores = []
-        for title, document in zip(dataset[title_column_name], dataset[document_column_name]):
-            sentences, scores = self.run_single(title, document, threshold, increase_power)
+        for title, document in zip(
+            dataset[title_column_name], dataset[document_column_name]
+        ):
+            sentences, scores = self.run_single(
+                title, document, threshold, increase_power
+            )
             all_sentences.append(sentences)
             all_scores.append(scores)
 
