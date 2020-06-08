@@ -2,8 +2,7 @@
     "baselines": [
         {"baseline_class": "Random", "init_kwargs": {"name": "Random"}, "run_kwargs": {"num_sentences": 12}},
         {"baseline_class": "Lead", "init_kwargs": {"name": "Lead"}, "run_kwargs": {"num_sentences": 12}},
-        {"baseline_class": "LexRank", "init_kwargs": {"name": "LexRank"}, "run_kwargs": {"num_sentences": 12, "threshold": 0.03, "increase_power": true}},
-        {"baseline_class": "LexRank v2", "init_kwargs": {"name": "LexRank v2"}, "run_kwargs": {"num_sentences": 12}},
+        {"baseline_class": "LexRank", "init_kwargs": {"name": "LexRank"}, "run_kwargs": {"num_sentences": 12}},
         {"baseline_class": "TextRank", "init_kwargs": {"name": "TextRank"}, "run_kwargs": {"num_sentences": 12}},
         {"baseline_class": "TFIDF", "init_kwargs": {"name": "TF-IDF"}, "run_kwargs": {"num_sentences": 12, "title_column_name": "title"}},
         {"baseline_class": "RougeOracle", "init_kwargs": {"name": "Rouge Oracle", "rouge_type": "rouge2", "rouge_method": "precision"}, "run_kwargs": {"num_sentences": 12, "run_summary_colunm_name": "clean_summary"}}
