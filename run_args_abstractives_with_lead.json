@@ -11,7 +11,7 @@
                 },
                 "abstractive_args": {
                     "name": "Bart",
-                    "model_name": ["bart-base", "/content/drive/My Drive/Github/MDMLS/en-models/bart-large-fine-tuned"],
+                    "model_name": ["facebook/bart-large", "/content/drive/My Drive/Github/MDMLS/en-models/bart-large-fine-tuned"],
                     "input_max_length": 1024,
                     "device": "cuda",
                     "batch_size": 8
@@ -42,7 +42,7 @@
                 },
                 "abstractive_args": {
                     "name": "Bart-cnn",
-                    "model_name": ["bart-base", "/content/drive/My Drive/Github/MDMLS/en-models/bart-large-cnn-fine-tuned"],
+                    "model_name": ["facebook/bart-large", "/content/drive/My Drive/Github/MDMLS/en-models/bart-large-cnn-fine-tuned"],
                     "input_max_length": 1024,
                     "device": "cuda",
                     "batch_size": 8
