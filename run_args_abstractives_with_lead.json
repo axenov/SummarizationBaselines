@@ -3,6 +3,37 @@
         {
             "baseline_class": "Combine", 
             "init_kwargs": {
+                "name": "Lead + Bert2Bert",
+                "extractive_class": "Lead",
+                "abstractive_class": "Bert2Bert",
+                "extractive_args": {
+                    "name": "Lead"
+                },
+                "abstractive_args": {
+                    "name": "Bert2Bert",
+                    "model_name": ["bert-base-cased", "/content/drive/My Drive/Github/MDMLS/en-models/bert2bert-fine-tuned"],
+                    "input_max_length": 512,
+                    "device": "cuda",
+                    "batch_size": 8
+                }
+            }, 
+            "run_kwargs": {
+                "extractive_args": {
+                    "num_sentences": null
+                },
+                "abstractive_args": {
+                    "num_beams": 4,
+                    "length_penalty": 2.0,
+                    "max_length": 400,
+                    "min_length": 200,
+                    "no_repeat_ngram_size": 3,
+                    "early_stopping": true
+                }
+            }
+        },
+        {
+            "baseline_class": "Combine", 
+            "init_kwargs": {
                 "name": "Lead + Bart",
                 "extractive_class": "Lead",
                 "abstractive_class": "Bart",
