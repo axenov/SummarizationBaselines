@@ -45,7 +45,7 @@ class Combine(Baseline):
             example["abstractive_input"] = " ".join(truncated_and_ordered_sentences)
             return example
 
-        dataset = dataset.map(get_extractive_summary)
+        dataset = dataset.map(truncate_and_order_example)
 
         # Abstractive step
         self.abstractive.name = self.name
