@@ -159,11 +159,11 @@
     ],
 
     "dataset": {
-        "name": "en_wiki_multi_news_cleaned.py",
+        "name": "en_wiki_multi_news.py",
         "split": "test",
         "cache_dir": ".en-wiki-multi-news-cache",
-        "document_column_name": "document",
-        "summary_colunm_name": "summary"
+        "document_column_name": "clean_document",
+        "summary_colunm_name": "clean_summary"
     },
 
     "run": {
