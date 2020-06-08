@@ -17,6 +17,7 @@ Implementation of summarization baselines. For the moment there are:
 ```
 git clone https://github.com/airKlizz/SummarizationBaselines
 cd SummarizationBaselines
+wget https://raw.githubusercontent.com/airKlizz/MultiDocMultiLingualSum/master/en_wiki_multi_news.py
 ```
 
 There is no ``requirements.txt`` file yet so install depedencies on demand :hugs:.
