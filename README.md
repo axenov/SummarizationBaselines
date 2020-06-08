@@ -37,6 +37,10 @@ This is an example of a ``run_args.json`` file:
 ```json
 {
     "baselines": [
+        {"baseline_class": "Random", "init_kwargs": {"name": "Random"}, "run_kwargs": {"num_sentences": 12, "non_redundant": true, "ordering": true}},
+        {"baseline_class": "Lead", "init_kwargs": {"name": "Lead"}, "run_kwargs": {"num_sentences": 12, "non_redundant": true, "ordering": true}},
+        {"baseline_class": "LexRank", "init_kwargs": {"name": "LexRank"}, "run_kwargs": {"num_sentences": 12, "non_redundant": true, "ordering": true}},
+        {"baseline_class": "TFIDF", "init_kwargs": {"name": "TF-IDF"}, "run_kwargs": {"num_sentences": 12, "title_column_name": "title", "non_redundant": true, "ordering": true}},
         {
             "baseline_class": "Extractive Bert", 
             "init_kwargs": {
@@ -47,12 +51,11 @@ This is an example of a ``run_args.json`` file:
                 "alpha": 0.7
             }, 
             "run_kwargs": {
-                "num_sentences": 10
+                "num_sentences": 10,
+                "non_redundant": true,
+                "ordering": true
             }
-        },
-        {"baseline_class": "Random", "init_kwargs": {"name": "Random"}, "run_kwargs": {"num_sentences": 10}},
-        {"baseline_class": "Lead", "init_kwargs": {"name": "Lead"}, "run_kwargs": {"num_sentences": 10}},
-        {"baseline_class": "LexRank", "init_kwargs": {"name": "LexRank"}, "run_kwargs": {"num_sentences": 10, "threshold": 0.03, "increase_power": true}}        
+        }       
     ],
 
     "dataset": {
@@ -103,13 +106,26 @@ Then just add you baseline on the ``baselines/baselines.py`` file by adding a ``
 
 ## Results for ``en-wiki-multi-news``
 
+### Comparison of different extractive baselines
 |     | rouge1.mid.fmeasure | rouge2.mid.fmeasure | rougeL.mid.fmeasure |
 | --- | --- | --- | --- |
-| Lead | 41.42% | 15.56% | 21.61% |
-| LexRank | 40.14% | 13.86% | 19.17% |
-| LexRank (unsorted) | 40.14% | 13.84% | 18.29% |
-| Random | 37.81% | 11.94% | 18.07% |
-| Random (unsorted) | 37.81% | 11.91% | 17.30% |
+| Lead | 41.91% | 15.98% | 21.66% |
+| Random | 39.08% | 12.80% | 17.51% |
+| Random - sorted| 39.08% | 12.83% | 18.45% |
+| LexRank | 39.47% | 14.18% | 18.13% |
+| LexRank - sorted| 39.47% | 14.21% | 19.05% |
+| LexRank - sorted non-redundant| 40.43% | 14.72% | 19.27% |
+| TextRank | 39.34% | 14.37% | 18.54% |
+| TextRank - sorted| 39.31% | 14.37% | 19.36% |
+| TextRank - sorted non-redundant| 40.50% | 14.91% | 19.62% |
+| TF-IDF | 40.28% | 14.19% | 18.74% |
+| TF-IDF - sorted | 40.28% | 14.20% | 19.37% |
+| TF-IDF - sorted non-redundant| 41.36% | 14.69% | 19.64% |
+
+
+### Oracle ordered baseline
+|     | rouge1.mid.fmeasure | rouge2.mid.fmeasure | rougeL.mid.fmeasure |
+| --- | --- | --- | --- |
 | RougeOracle-rouge1-recall | 44.75% | 19.72% | 23.05% |
 | RougeOracle-rouge1-precision | 50.66% | 26.54% | 28.95% |
 | RougeOracle-rouge1-f1 | 45.60% | 20.32% | 23.56% |

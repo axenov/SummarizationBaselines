@@ -6,9 +6,8 @@ from baselines.t5 import T5
 from baselines.rouge import RougeOracle
 from baselines.rouge_greedy import RougeOracleGreedy
 from baselines.extractive_bert import ExtractiveBert
-
-# from baselines.mmr import mmr
-# from baselines.tfidf import TFIDF
+from baselines.textrank import TextRank
+from baselines.tfidf import TFIDF
 
 
 def use(baseline_class, **init_kwargs):
@@ -22,6 +21,10 @@ def use(baseline_class, **init_kwargs):
         return RougeOracleGreedy(**init_kwargs)
     if baseline_class == "LexRank":
         return LexRank(**init_kwargs)
+    if baseline_class == "TextRank":
+        return TextRank(**init_kwargs)
+    if baseline_class == "TFIDF":
+        return TFIDF(**init_kwargs)
     if baseline_class == "Bart":
         return Bart(**init_kwargs)
     if baseline_class == "T5":

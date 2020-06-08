@@ -46,19 +46,21 @@ class RougeOracleGreedy(Baseline):
                 test_sentence = sentences[idx]
                 if self.calculate_rouge(" ".join(summary_sentences+[test_sentence]), reference) > self.calculate_rouge(" ".join(summary_sentences), reference):
                     summary_sentences.append(test_sentence)
-                    #summary_sentences_indexes.append(sentences_index[idx])
+                    summary_sentences_indexes.append(sentences_index[idx])
                     scores.pop(idx)
                     sentences.pop(idx)
-                    #sentences_index.pop(idx)
+                    sentences_index.pop(idx)
                 else:
                     break
-            #Sort
-            summary_sentences_scores = [max(summary_sentences_indexes)-x for x in summary_sentences_indexes]
-            #summary_sentences_scores = list(range(1, len(summary_sentences) + 1))[::-1]
+
+            summary_sentences_indexes_sorted = np.argsort(summary_sentences_indexes)
+            summary_sentences_sorted = [summary_sentences[i] for i in summary_sentences_indexes_sorted]
+            summary_sentences_scores = list(range(1, len(summary_sentences) + 1))[::-1]
+            summary_sentences_scores = [summary_sentences_scores[i] for i in summary_sentences_indexes_sorted]
 
             # Add to new column
             example[self.name] = {
-                "sentences": summary_sentences,
+                "sentences": summary_sentences_sorted,
                 "scores": summary_sentences_scores,
             }
             return example

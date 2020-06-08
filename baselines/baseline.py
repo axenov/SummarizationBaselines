@@ -5,6 +5,8 @@ import numpy as np
 from nltk.tokenize import sent_tokenize, word_tokenize
 from nlp import load_metric
 import pyarrow as pa
+from rouge_score import rouge_scorer
+
 
 
 class Baseline(object):
@@ -13,6 +15,10 @@ class Baseline(object):
         A Baseline is the base class for all baselines.
         """
         self.name = name.replace(" ", "-").lower()
+        self.rougeType = ['rouge2']
+        self.rougeMethod = 'recall'
+        self.scorer = rouge_scorer.RougeScorer(self.rougeType)
+
 
     def rank_sentences(self, dataset, document_column_name, **kwargs):
         """
@@ -25,6 +31,19 @@ class Baseline(object):
         """
 
         raise NotImplementedError()
+
+    def calculate_rouge(self,sentence1,sentence2):
+        scores = self.scorer.score(sentence1, sentence2)
+        method = self.rougeMethod
+        ind = 2
+        if method == 'recall':
+            ind = 0
+        elif method == 'precision':
+            ind = 1
+        elif method == 'f1': 
+            ind =2
+        rouge_score = sum([scores[score][ind] for score in self.rougeType])/len(self.rougeType)
+        return rouge_score
 
     def get_summaries(self, dataset, document_column_name, **kwargs):
         """
@@ -46,15 +65,42 @@ class Baseline(object):
 
         dataset = Baseline.append_column(dataset, num_sentences, "num_sentences")
 
+        non_redundant = kwargs["non_redundant"]
+        non_redundant = [non_redundant for i in range(len(dataset))]
+        dataset = Baseline.append_column(dataset, non_redundant, "non_redundant")
+
+        ordering = kwargs["ordering"]
+        ordering = [ordering for i in range(len(dataset))]
+        dataset = Baseline.append_column(dataset, ordering, "ordering")
+
+
+
         def get_extractive_summary(example):
+            np.random.seed(5)
             scores = np.array(example[self.name]["scores"])
             sentences = example[self.name]["sentences"]
-
-            #Rank sentenses
-            np.random.seed(5)
             sorted_ix = np.argsort(scores)[::-1]
-            sorted_ix_summary = sorted_ix[: min(len(sentences),example["num_sentences"])]
-            sorted_ix_summary = np.sort(sorted_ix_summary)
+
+            num_sentences =  min(len(sentences),example["num_sentences"])
+            non_redundant = example["non_redundant"]
+            ordering = example["ordering"]
+
+            #Generate non-redundant summary
+            sorted_ix_summary = []
+            if non_redundant:
+                redundance_score = 0
+                for k in sorted_ix:  
+                    redundance_score = self.calculate_rouge(sentences[k]," ".join([sentences[i] for i in sorted_ix_summary]))
+                    if redundance_score < 0.05:
+                        sorted_ix_summary.append(k)
+                    if len(sorted_ix_summary)>=num_sentences:
+                        break
+            else:
+                sorted_ix_summary = sorted_ix[:num_sentences]
+
+            #Ordering sentences
+            if ordering:
+                sorted_ix_summary = np.sort(sorted_ix_summary)
             summary_sentences = [sentences[j] for j in sorted_ix_summary]
 
             hyp = " ".join(summary_sentences)
