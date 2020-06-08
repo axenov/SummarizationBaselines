@@ -6,15 +6,15 @@
         {"baseline_class": "LexRank v2", "init_kwargs": {"name": "LexRank v2"}, "run_kwargs": {"num_sentences": 12}},
         {"baseline_class": "TextRank", "init_kwargs": {"name": "TextRank"}, "run_kwargs": {"num_sentences": 12}},
         {"baseline_class": "TFIDF", "init_kwargs": {"name": "TF-IDF"}, "run_kwargs": {"num_sentences": 12, "title_column_name": "title"}},
-        {"baseline_class": "RougeOracle", "init_kwargs": {"name": "Rouge Oracle", "rouge_type": "rouge2", "rouge_method": "precision"}, "run_kwargs": {"num_sentences": 12, "summary_colunm_name": "cleaned_summary"}}
+        {"baseline_class": "RougeOracle", "init_kwargs": {"name": "Rouge Oracle", "rouge_type": "rouge2", "rouge_method": "precision"}, "run_kwargs": {"num_sentences": 12, "run_summary_colunm_name": "clean_summary"}}
     ],
 
     "dataset": {
-        "name": "en_wiki_multi_news_cleaned.py",
+        "name": "en_wiki_multi_news.py",
         "split": "test",
         "cache_dir": ".en-wiki-multi-news-cache",
-        "document_column_name": "cleaned_document",
-        "summary_colunm_name": "cleaned_summary"
+        "document_column_name": "clean_document",
+        "summary_colunm_name": "clean_summary"
     },
 
     "run": {

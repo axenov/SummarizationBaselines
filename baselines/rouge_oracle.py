@@ -1,6 +1,8 @@
 from nltk.tokenize import sent_tokenize
 from nlp import load_metric
 import numpy as np
+from tqdm import tqdm
+
 from baselines.baseline import Baseline
 
 
@@ -25,21 +27,22 @@ class RougeOracle(Baseline):
             rouge_types=[self.rouge_type],
             use_agregator=False,
         )
-        return score[self.rouge_type][0][self.rouge_method]
+        value = score[self.rouge_type][0][self.rouge_method]
+        return value
 
     def rank_sentences(
-        self, dataset, document_column_name, summary_colunm_name, **kwargs
+        self, dataset, document_column_name, run_summary_colunm_name, **kwargs
     ):
-        all_sentences = list(map(sent_tokenize, dataset[document_column_name]))
-        summaries = dataset[summary_colunm_name]
-        all_scores = [
-            self._calculate_rouge(sentence, summary)
-            for sentences, summary in zip(all_sentences, summaries)
-            for sentence in sentences
-        ]
+        def run_rouge_oracle(example):
+            sentences = sent_tokenize(example[document_column_name])
+            reference = example[run_summary_colunm_name]
+            scores = [self._calculate_rouge(sent,reference) for sent in sentences]
 
-        data = [
-            {"sentences": sentences, "scores": scores}
-            for sentences, scores in zip(all_sentences, all_scores)
-        ]
-        return Baseline.append_column(dataset, data, self.name)
+            example[self.name] = {
+                "sentences": sentences,
+                "scores": scores,
+            }
+            return example
+
+        dataset = dataset.map(run_rouge_oracle)
+        return dataset

@@ -24,7 +24,7 @@ class LexRankV2(Baseline):
         all_sentences = []
         all_scores = []
         for document in dataset[document_column_name]:
-            sentences, scores = self.run_single(document, threshold, increase_power)
+            sentences, scores = self.run_single(document)
             all_sentences.append(sentences)
             all_scores.append(scores)
 

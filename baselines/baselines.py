@@ -19,7 +19,7 @@ def use(baseline_class, **init_kwargs):
     if baseline_class == "LexRank":
         return LexRank(**init_kwargs)
     if baseline_class == "LexRank v2":
-        return LexRankv2(**init_kwargs)
+        return LexRankV2(**init_kwargs)
     if baseline_class == "TextRank":
         return TextRank(**init_kwargs)
     if baseline_class == "TFIDF":

@@ -2,10 +2,16 @@ from baselines.baselines import use
 import utils
 from nlp import load_dataset
 from pathlib import Path
+import argparse
 
 from parser import parse_json_file
 
-args = parse_json_file("run_args_extractives.json")
+parser = argparse.ArgumentParser()
+parser.add_argument("run_args_file", help="Path to the args json file",
+                    type=str)
+json_args = parser.parse_args()
+
+args = parse_json_file(json_args.run_args_file)
 
 # Load dataset
 dataset = load_dataset(

@@ -23,9 +23,7 @@ class TFIDF(Baseline):
         for title, document in zip(
             dataset[title_column_name], dataset[document_column_name]
         ):
-            sentences, scores = self.run_single(
-                title, document, threshold, increase_power
-            )
+            sentences, scores = self.run_single(title, document)
             all_sentences.append(sentences)
             all_scores.append(scores)
 
@@ -35,7 +33,7 @@ class TFIDF(Baseline):
         ]
         return Baseline.append_column(dataset, data, self.name)
 
-    def run_single(self, document, threshold=0.03, increase_power=True):
+    def run_single(self, title, document):
 
         sentences = sent_tokenize(document)
 

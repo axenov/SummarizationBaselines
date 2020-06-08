@@ -1,6 +1,7 @@
 import numpy as np
 from nltk.tokenize import sent_tokenize, word_tokenize
 from sklearn.metrics.pairwise import cosine_similarity
+from tqdm import tqdm
 
 from baselines.baseline import Baseline
 
@@ -18,8 +19,8 @@ class TextRank(Baseline):
     def rank_sentences(self, dataset, document_column_name, **kwargs):
         all_sentences = []
         all_scores = []
-        for document in dataset[document_column_name]:
-            sentences, scores = self.run_single(document, threshold, increase_power)
+        for document in tqdm(dataset[document_column_name]):
+            sentences, scores = self.run_single(document)
             all_sentences.append(sentences)
             all_scores.append(scores)
 
@@ -30,7 +31,6 @@ class TextRank(Baseline):
         return Baseline.append_column(dataset, data, self.name)
 
     def run_single(self, document):
-
         sentences = sent_tokenize(document)
         tokenized_sentences = [word_tokenize(sent) for sent in sentences]
 
@@ -51,12 +51,12 @@ class TextRank(Baseline):
                 if idx1 == idx2:
                     continue
 
-                sm[idx1][idx2] = sentence_similarity(
+                sm[idx1][idx2] = self._sentence_similarity(
                     sentences[idx1], sentences[idx2], stopwords=stopwords
                 )
 
         # Get Symmeric matrix
-        sm = get_symmetric_matrix(sm)
+        sm = self._get_symmetric_matrix(sm)
 
         # Normalize matrix by column
         norm = np.sum(sm, axis=0)
@@ -91,6 +91,9 @@ class TextRank(Baseline):
             vector2[all_words.index(w)] += 1
 
         return cosine_similarity([vector1], [vector2])[0][0]
+
+    def _get_symmetric_matrix(self, matrix):
+        return matrix + matrix.T - np.diag(matrix.diagonal())
 
     def _run_page_rank(self, similarity_matrix):
         # constants
