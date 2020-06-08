@@ -1,6 +1,10 @@
 from baselines.random import Random
 from baselines.lead import Lead
 from baselines.lexrank import LexRank
+from baselines.textrank import TextRank
+from baselines.tfidf import TFIDF
+from baselines.rouge_oracle import RougeOracle
+from baselines.bert2bert import Bert2Bert
 from baselines.bart import Bart
 from baselines.t5 import T5
 from baselines.t5_with_title import T5WithTitle
@@ -14,6 +18,14 @@ def use(baseline_class, **init_kwargs):
         return Lead(**init_kwargs)
     if baseline_class == "LexRank":
         return LexRank(**init_kwargs)
+    if baseline_class == "TextRank":
+        return TextRank(**init_kwargs)
+    if baseline_class == "TFIDF":
+        return TFIDF(**init_kwargs)
+    if baseline_class == "RougeOracle":
+        return RougeOracle(**init_kwargs)
+    if baseline_class == "Bert2Bert":
+        return Bert2Bert(**init_kwargs)
     if baseline_class == "Bart":
         return Bart(**init_kwargs)
     if baseline_class == "T5":
