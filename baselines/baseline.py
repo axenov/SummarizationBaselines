@@ -87,8 +87,6 @@ class Baseline(object):
         def compute_rouge_batch(example):
             predictions = example[f"{self.name}_hypothesis"]
             references = example[summary_colunm_name]
-            predictions = list(map(lambda s: " ".join(word_tokenize(s)), predictions))
-            references = list(map(lambda s: " ".join(word_tokenize(s)), references))
             rouge_metric.add_batch(predictions, references)
 
         dataset.map(compute_rouge_batch, batched=True)

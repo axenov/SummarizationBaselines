@@ -1,7 +1,8 @@
 from nltk.tokenize import sent_tokenize
 
 from baselines.baseline import Baseline
-from baselines.baselines import use
+
+from baselines import baselines
 
 
 class Combine(Baseline):
@@ -19,8 +20,8 @@ class Combine(Baseline):
         abstractive_args,
     ):
         super().__init__(name)
-        self.extractive = use(extractive_class, **extractive_args)
-        self.abstractive = use(abstractive_class, **abstractive_args)
+        self.extractive = baselines.use(extractive_class, **extractive_args)
+        self.abstractive = baselines.use(abstractive_class, **abstractive_args)
 
     def get_summaries(
         self, dataset, document_column_name, extractive_args, abstractive_args
