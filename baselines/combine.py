@@ -1,5 +1,6 @@
 from nltk.tokenize import sent_tokenize, word_tokenize
 from string import punctuation
+import numpy as np
 
 from baselines.baseline import Baseline
 
