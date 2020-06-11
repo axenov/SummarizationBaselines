@@ -169,4 +169,13 @@ Then just add you baseline on the ``baselines/baselines.py`` file by adding a ``
 | TextRank | 29.97% | 11.16% | 15.93% |
 | TF-IDF | 30.80% | 11.00% | 15.93% |
 | RougeOracle-rouge2-precision | 34.45% | 16.77% | 20.07% |
+## Results for ``combine-wiki-multi-news`` 12 sentences
+|     | rouge1.mid.fmeasure | rouge2.mid.fmeasure | rougeL.mid.fmeasure |
+| --- | --- | --- | --- |
+| Random | 34.17% | 11.00% | 15.40% |
+| Lead | 36.60% | 13.44% | 18.77% |
+| LexRank | 35.84% | 12.67% | 17.18% |
+| TextRank | 35.49% | 12.62% | 17.33% |
+| TF-IDF | 36.48% | 12.58% | 17.50% |
+| RougeOracle-rouge2-precision | 42.83% | 21.90% | 23.94% |
 > Table obtained by running the example ``run_args.json`` file and the table is automatically generated in ``results.md``.
