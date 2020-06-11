@@ -99,6 +99,7 @@ class Baseline(object):
                 sorted_ix_summary = sorted_ix[:num_sentences]
 
             #Ordering sentences
+            np.random.seed(5)
             if ordering:
                 sorted_ix_summary = np.sort(sorted_ix_summary)
             summary_sentences = [sentences[j] for j in sorted_ix_summary]

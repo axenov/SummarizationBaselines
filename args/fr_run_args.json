@@ -1,0 +1,31 @@
+{
+    "baselines": [
+        {"baseline_class": "Random", "init_kwargs": {"name": "Random"}, "run_kwargs": {"num_sentences": 8, "non_redundant": false, "ordering": false}},
+        {"baseline_class": "Lead", "init_kwargs": {"name": "Lead"}, "run_kwargs": {"num_sentences": 8, "non_redundant": false, "ordering": true}},
+        {"baseline_class": "LexRank", "init_kwargs": {"name": "LexRank"}, "run_kwargs": {"num_sentences": 8, "non_redundant": true, "ordering": true}},
+        {"baseline_class": "TextRank", "init_kwargs": {"name": "TextRank"}, "run_kwargs": {"num_sentences": 8, "non_redundant": true, "ordering": true}},
+        {"baseline_class": "TFIDF", "init_kwargs": {"name": "TF-IDF"}, "run_kwargs": {"num_sentences": 8, "title_column_name": "title", "non_redundant": true, "ordering": true}},
+        {"baseline_class": "RougeOracle", "init_kwargs": {"name": "RougeOracle-rouge2-precision", "rougeType": ["rouge2"], "rougeMethod": "precision"}, "run_kwargs": {"num_sentences": 8, "non_redundant": false, "ordering": true}}
+
+    ],
+
+    "dataset": {
+        "name": "fr_wiki_multi_news.py",
+        "split": "test",
+        "cache_dir": ".fr-wiki-multi-news-cache",
+        "document_column_name": "document",
+        "summary_colunm_name": "summary"
+    },
+
+    "run": {
+        "hypotheses_folder": "hypotheses/",
+        "csv_file": "results.csv",
+        "md_file": "results.md",
+        "rouge_types": {
+            "rouge1": ["mid.fmeasure"],
+            "rouge2": ["mid.fmeasure"],
+            "rougeL": ["mid.fmeasure"]
+        }
+    }
+        
+}

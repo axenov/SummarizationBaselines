@@ -140,4 +140,33 @@ Then just add you baseline on the ``baselines/baselines.py`` file by adding a ``
 | Extractive Bert (old) | 38.33% | 12.13% | 16.95% |
 | Extractive Bert (old sorted) | 38.42% | 12.12% | 17.76% |
 
+
+# Final results
+## Results for ``en-wiki-multi-news`` 12 sentences
+|     | rouge1.mid.fmeasure | rouge2.mid.fmeasure | rougeL.mid.fmeasure |
+| --- | --- | --- | --- |
+| Random | 39.08% | 12.80% | 17.51% |
+| Lead | 41.91% | 15.98% | 21.66% |
+| LexRank | 40.43% | 14.72% | 19.27% |
+| TextRank | 40.50% | 14.91% | 19.62% |
+| TF-IDF | 41.36% | 14.69% | 19.64% |
+| RougeOracle-rouge2-precision | 49.67% | 27.20% | 28.32% |
+## Results for ``de-wiki-multi-news`` 12 sentences
+|     | rouge1.mid.fmeasure | rouge2.mid.fmeasure | rougeL.mid.fmeasure |
+| --- | --- | --- | --- |
+| Random | 31.38% | 7.95% | 13.18% |
+| Lead | 34.46% | 10.37% | 16.13% |
+| LexRank | 35.31% | 10.77% | 15.79% |
+| TextRank | 33.47% | 9.84% | 15.25% |
+| TF-IDF | 34.54% | 10.26% | 15.69% |
+| RougeOracle-rouge2-precision | 41.87% | 19.17% | 21.86% |
+## Results for ``fr-wiki-multi-news`` 8 sentences
+|     | rouge1.mid.fmeasure | rouge2.mid.fmeasure | rougeL.mid.fmeasure |
+| --- | --- | --- | --- |
+| Random | 28.58% | 9.78% | 14.28% |
+| Lead | 30.52% | 11.98% | 16.79% |
+| LexRank | 29.80% | 10.69% | 15.22% |
+| TextRank | 29.97% | 11.16% | 15.93% |
+| TF-IDF | 30.80% | 11.00% | 15.93% |
+| RougeOracle-rouge2-precision | 34.45% | 16.77% | 20.07% |
 > Table obtained by running the example ``run_args.json`` file and the table is automatically generated in ``results.md``.

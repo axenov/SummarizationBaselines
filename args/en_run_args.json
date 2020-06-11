@@ -10,9 +10,9 @@
     ],
 
     "dataset": {
-        "name": "de_wiki_multi_news.py",
+        "name": "en_wiki_multi_news_cleaned.py",
         "split": "test",
-        "cache_dir": ".de-wiki-multi-news-cache",
+        "cache_dir": ".en-wiki-multi-news-cache",
         "document_column_name": "document",
         "summary_colunm_name": "summary"
     },
